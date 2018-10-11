@@ -1,2 +1,5 @@
-homework_instructions.md
-Installing-MongoDB.md
+.gitignore
+# homework_instructions.md
+# Installing-MongoDB.md
+package.json
+node_modules/
