@@ -10,68 +10,56 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <a class="navbar-brand" href="/">Mongo Scraper</a>
-        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/saved">Saved Articles</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-danger scrape-new">SCRAPE NEW ARTICLES!</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-danger clear">CLEAR ARTICLES!</a>
-                </li>
-            </ul>
-        </div>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <button class="btn btn-info nav-button scrape-button">SCRAPE NEW ARTICLES!</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-info nav-button clear-button">CLEAR ARTICLES!</button>
+            </li>
+        </ul>
     </nav>
 
 
     <div class="jumbotron text-center background-image">
-        <!-- <div class="background-image"> -->
-            <div class="caption">
-                <h1>Mongo Scraper</h1>
-                <p>Reductress Edition</p>
-            </div>
-        <!-- </div> -->
-    </div>
-
-    <div class="container-fluid article-container">
-        <div data-_id="5bbe643fcf0f1000140824fe" class="card">
-            <div class="card-header">
-                <h3>
-                    <a class="article-link" target="_blank" rel="noopener noreferrer" href="https://www.nytimes.com/2018/10/10/opinion/immigration-trump-health-public-charge.html">Your Health or Your Green Card?</a>
-                    <a class="btn btn-success save">Save Article</a>
-                </h3>
-            </div>
-            <div class="card-body">A doctor explains how a new rule proposed by the Trump administration would force vulnerable people to make impossible decisions.
-            </div>
-        </div>
-        <div id='articleInput'>
-            <!-- article input goes here -->
+        <div class="caption">
+            <h1>Mongo Scraper</h1>
+            <h4>Reductress Edition</h4>
         </div>
     </div>
 
-    <footer class="footer">
+    <div class='container-fluid row'>
+        <div class="article-container col-8">
+            <div id='articleInput'>
+                <h3>No Articles To Show</h3>
+                <!-- article input goes here -->
+            </div>
+        </div>
+        <div class='col-4'>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Notes</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title article-title">No Article Selected</h4>
+                    <div id='note-user-input'>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-center">
         <div class="container">
-            <p>Reductress Scraper</p>
+            <h5>Reductress Scraper</h5>
         </div>
     </footer>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script> -->
     <script src="logic.js"></script>
           
 
