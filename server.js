@@ -18,9 +18,6 @@ var PORT = process.env.PORT || 3000;
 var app = express();
 
 
-
-
-
 // Configure middleware
 
 // Use morgan logger for logging requests
@@ -33,17 +30,9 @@ app.use(express.static("public"));
 
 
 // // MLab / Mongoose stuff
-// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/reductressdb";
-
-// // Set mongoose to leverage built in JavaScript ES6 Promises
-// // Connect to the Mongo DB
-// mongoose.Promise = Promise;
-// mongoose.connect(MONGODB_URI);
 
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/reductressdb", { useNewUrlParser: true });
-
-
 
 
 // send routes through the routes folder
@@ -196,13 +185,4 @@ app.post("/articles/:id", function(req, res) {
 app.listen(PORT, function() {
   console.log("App running on port 3000!");
 });
-
-
-
-
-
-
-// // Sets up the Express app to handle data parsing
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
 
