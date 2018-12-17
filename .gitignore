@@ -1,7 +1,3 @@
 .gitignore
 homework_instructions.md
-Installing-MongoDB.md
-package.json
 node_modules/
-server-jic.js
-server-jic2.js
