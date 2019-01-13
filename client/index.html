@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Movie Master</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/materia/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <a class="navbar-brand" href="/">Mongo Scraper</a>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <button class="btn btn-info nav-button scrape-button">SCRAPE NEW ARTICLES!</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-info nav-button clear-button">CLEAR ARTICLES!</button>
+            </li>
+        </ul>
+    </nav>
+
+
+    <div class="jumbotron text-center background-image">
+        <div class="caption">
+            <h1>Mongo Scraper</h1>
+            <h4>Reductress Edition</h4>
+        </div>
+    </div>
+
+    <div class='container-fluid row'>
+        <div class="article-container col-8">
+            <div id='articleInput'>
+                <h3>No Articles To Show</h3>
+                <!-- article input goes here -->
+            </div>
+        </div>
+        <div class='col-4'>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Notes</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title article-title">No Article Selected</h4>
+                    <div id='note-user-input'>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-center">
+        <div class="container">
+            <h5>Reductress Scraper</h5>
+        </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="logic.js"></script>
+          
+
+</body>
