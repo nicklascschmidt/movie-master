@@ -1,23 +1,24 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var User = sequelize.define('User', {
-    username: {
+  var Movie = sequelize.define('Movie', {
+    title: {
       type: DataTypes.STRING,
-      validate: {
-        len: [3,30]
-      }
     },
-    password: {
+    imdbUrl: {
       type: DataTypes.STRING,
-      validate: {
-        len: [5,30]
-      }
-    }
+    },
+    year: {
+      type: DataTypes.INTEGER,
+      // validate: {
+      //   len: [5,30]
+      // }
+    },
+
   });
 
   // User.associate = function(models) {
   //   models.User.hasMany(models.Task);
   // };
 
-  return User
+  return Movie
 };

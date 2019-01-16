@@ -1,66 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 
 <head>
   <title>Movie Master</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/materia/bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/materia/bootstrap.min.css'/>
+  <link rel='stylesheet' type='text/css' href='/style.css'>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <a class="navbar-brand" href="/">Mongo Scraper</a>
+  <nav class='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
+    <a class='navbar-brand' href='/'>Movie Master</a>
+    <ul class='navbar-nav ml-auto'>
+      <li class='nav-item'>
+        <a href='/' class='btn btn-info nav-button'>Login / Signup</a>
+      </li>
+      <li class='nav-item'>
+        <a href='/my-movies.html' class='btn btn-info nav-button'>My Movies</a>
+      </li>
+      <li class='nav-item'>
+        <a href='/search.html' class='btn btn-info nav-button'>Movie Search</a>
+      </li>
+    </ul>
+  </nav>
 
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <button class="btn btn-info nav-button scrape-button">SCRAPE NEW ARTICLES!</button>
-            </li>
-            <li class="nav-item">
-                <button class="btn btn-info nav-button clear-button">CLEAR ARTICLES!</button>
-            </li>
-        </ul>
-    </nav>
+  <div class='jumbotron text-center background-image'>
+    <h1>Login / Signup</h1>
+    <h4>Log into an account or create one to track your movie to-watch list</h4>
+  </div>
 
-
-    <div class="jumbotron text-center background-image">
-        <div class="caption">
-            <h1>Mongo Scraper</h1>
-            <h4>Reductress Edition</h4>
+  <div id='userForms' class='container-fluid row'>
+    <div class='col-6 col-xs-12'>
+      <div class='card'>
+        <div class='card-header'>
+          <h3>Login</h3>
         </div>
-    </div>
-
-    <div class='container-fluid row'>
-        <div class="article-container col-8">
-            <div id='articleInput'>
-                <h3>No Articles To Show</h3>
-                <!-- article input goes here -->
+        <div class='card-body'>
+          <form>
+            <div class="form-group">
+              <label for="loginUsernameInput">Username</label>
+              <input type="text" class="form-control" id="loginUsernameInput" placeholder="Username">
             </div>
-        </div>
-        <div class='col-4'>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Notes</h3>
-                </div>
-                <div class="card-body">
-                    <h4 class="card-title article-title">No Article Selected</h4>
-                    <div id='note-user-input'>
-
-                    </div>
-                </div>
+            <div class="form-group">
+              <label for="loginPasswordInput">Password</label>
+              <input type="password" class="form-control" id="loginPasswordInput" placeholder="Password">
             </div>
+            <button type="submit" id='submitLogin' class="btn btn-primary">Submit</button>
+          </form>
+          <div id='loginInputError'></div>
         </div>
+      </div>
     </div>
-
-    <footer class="footer text-center">
-        <div class="container">
-            <h5>Reductress Scraper</h5>
+    <div class='col-6 col-xs-12'>
+      <div class='card'>
+        <div class='card-header'>
+          <h3>Signup</h3>
         </div>
-    </footer>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="logic.js"></script>
-          
-
+        <div class='card-body'>
+            <form id='signupForm'>
+              <div class="form-group">
+                <label for="signupUsernameInput">Username</label>
+                <input type="text" class="form-control" id="signupUsernameInput" placeholder="Username">
+              </div>
+              <div class="form-group">
+                <label for="signupPasswordInput">Password</label>
+                <input type="password" class="form-control" id="signupPasswordInput" placeholder="Password">
+              </div>
+              <button type="submit" id='submitSignup' class="btn btn-primary">Submit</button>
+            </form>
+          <div id='signupInputError'></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script src='/js/index.js'></script>
 </body>
