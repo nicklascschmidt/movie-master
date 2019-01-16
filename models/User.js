@@ -1,6 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     username: {
       type: DataTypes.STRING,
       validate: {
@@ -15,9 +20,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  User.associate = function(models) {
+    models.User.hasMany(models.Movie);
+  };
+
   // User.associate = function(models) {
-  //   models.User.hasMany(models.Task);
-  // };
+  //   User.hasMany(models.Movie, {
+  //     foreignKey: {
+  //       allowNull: false
+  //     }
+  //   });
+  // }; 
 
   return User
 };

@@ -17,7 +17,10 @@ module.exports = function(app) {
       password: req.body.password
     }).then(function() {
       res.end();
-    });
+    }).catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    })
 
   });
 
@@ -36,5 +39,20 @@ module.exports = function(app) {
       res.sendStatus(500);
     })
   });
+
+  // Add a movie to to-do list
+  app.post('/api/get-movies', function(req,res) {
+    console.log('req.body',req.body);
+    db.Movie.create({
+      UserId: req.body.UserId,
+      title: req.body.title,
+      isWatched: req.body.isWatched
+    }).then( () => {
+      res.end();
+    }).catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    })
+  })
 
 };

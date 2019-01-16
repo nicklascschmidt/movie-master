@@ -16,8 +16,14 @@ app.use(express.static("client"));
 require("./routes/html-routes")(app);
 require("./routes/api-routes")(app);
 
-app.listen(PORT, function() {
-  console.log(`🌎  ==> App running on PORT ${PORT}!`);
+const db = require("./models");
+
+const force = { force: true} // true resets db
+
+db.sequelize.sync(force).then(function() {
+  app.listen(PORT, function() {
+    console.log(`🌎  ==> App running on PORT ${PORT}!`);
+  });
 });
 
 module.exports = app;

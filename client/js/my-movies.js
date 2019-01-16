@@ -3,14 +3,24 @@ console.log('Lieutenant, we are connected and ready to rumble.');
 $(document).ready(showUnwatchedMovies);
 
 function showUnwatchedMovies() {
-  
+  let userId = sessionStorage.getItem('movieMasterId');
+  let movie = {
+    UserId: userId,
+    title: 'some movie',
+    isWatched: true
+  }
+  $.post('/api/get-movies',movie)
+    .then( () => {
+      console.log('posted!');
+    })
+    .catch( err => console.log(err))
 }
 
 
-$(document).on("click", ".scrape-button", scrapeArticle);
-$(document).on("click", ".clear-button", clearArticles);
-$('body').on("click",'.article-card', articleClickHandler);
-$('body').on("click", "#save-note", saveNote);
+// $(document).on("click", ".scrape-button", scrapeArticle);
+// $(document).on("click", ".clear-button", clearArticles);
+// $('body').on("click",'.article-card', articleClickHandler);
+// $('body').on("click", "#save-note", saveNote);
 
 function scrapeArticle() {
     console.log('scraping...');
