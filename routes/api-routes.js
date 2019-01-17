@@ -39,7 +39,7 @@ module.exports = function(app) {
 
   // Add a movie to to-do list
   app.post('/api/get-movies', function(req,res) {
-    console.log('req.body',req.body);
+    // console.log('req.body',req.body);
 
     db.Movie.create(
       req.body
@@ -53,7 +53,7 @@ module.exports = function(app) {
 
   // Get all movies
   app.get('/api/get-all-movies', function(req,res) {
-    console.log('req.query',req.query);
+    // console.log('req.query',req.query);
     db.Movie.findAll({
       where: req.query
     })
@@ -81,5 +81,19 @@ module.exports = function(app) {
         console.log(err);
         res.sendStatus(500);
       })
+  })
+
+  app.put('/api/update-user-rating', function(req,res) {
+    // console.log('req.body',req.body);
+
+    db.Movie.update({
+      userRating: req.body.rating
+    },{
+      where: {
+        id: req.body.id
+      }
+    })
+      .then( data => console.log(`updated ${data} record`))
+      .catch( err => console.log('err',err))
   })
 };

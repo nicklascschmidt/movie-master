@@ -1,7 +1,6 @@
 console.log('Lieutenant, we are connected and ready to rumble.');
 
 $(document).ready(handleMoviesOnLoad());
-$('body').on('click','.addUserRating',addUserRating);
 
 
 async function handleMoviesOnLoad() {
@@ -12,24 +11,8 @@ async function handleMoviesOnLoad() {
 }
 
 function displayMovies(array,type) {
-  console.log('array',array);
   let $movieDiv = $('<div>');
   for (let n=0; n < array.length; n++) {
-    let movie = {
-      title: array[n].title,
-      imdbUrl: array[n].imdbUrl,
-      posterUrl: array[n].posterUrl,
-      year: array[n].year,
-      maturityRating: array[n].maturityRating,
-      lengthInMinutes: array[n].lengthInMinutes,
-      imdbRating: array[n].imdbRating,
-      plot: array[n].plot,
-      director: array[n].director,
-      actors: array[n].actors,
-      genre: array[n].genre,
-      userRating: array[n].userRating
-    }
-    console.log(movie);
     let $movie = $('<div>');
     $movie.html(`
       <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
@@ -44,7 +27,7 @@ function displayMovies(array,type) {
             </div>
             <div class='col-6 text-right'>
               <p>IMDB Rating: <i class="fas fa-star"></i> ${array[n].imdbRating}</p>
-              ${getUserRating(array[n].userRating)}
+              ${getUserRating(array[n].userRating,array[n].id)}
             </div>
           </div>
           <p>${array[n].plot}</p>
@@ -55,19 +38,81 @@ function displayMovies(array,type) {
     $movieDiv.append($movie);
   }
   $(`#${type}-movies`).append($movieDiv);
-  
 }
 
-function getUserRating(rating) {
+function getUserRating(rating,id) {
   if (rating !== null) {
     return `<p>My Rating: <i class="far fa-star"></i> ${rating}</p>`
   } else {
-    return `<button class='btn btn-info btn-sm addUserRating'>rate</button>`
+    return `<div class='switchToUserRatingForm text-right' data-id='${id}'><button class='btn btn-info btn-sm'>rate</button></div>`
   }
 }
 
+$('body').on('click','.switchToUserRatingForm',switchToUserRatingForm);
+
+function switchToUserRatingForm() {
+  let id = $(this).attr('data-id');
+  $(this).removeClass(); // allows user to access input field
+  $(this).attr('id',`div${id}`); // set ID so we can clear the form after submitting
+  $(this).html(`
+    <form class='form-inline float-right'>
+      <label class="sr-only" for="inlineFormInputName2">Name</label>
+      <input type='text' class='form-control form-control-sm' placeholder='#' id='input${id}' style='width:30px'>
+      <button type='submit' class='submitUserRating btn btn-info btn-sm ml-3' data-id='${id}'>Submit</button>
+    </form>
+  `)
+}
+
+$('body').on('click','.submitUserRating',submitUserRating);
+
+function submitUserRating() {
+  event.preventDefault();
+
+  let id = $(this).attr('data-id'); // grab data-id (#) from the button
+  let inputRating = $(`#input${id}`).val() // grab user input
+
+  let errorObj = validateUserRating(inputRating);
+
+  if (!errorObj.isError) {
+    submitUserRatingToDb(inputRating,id);
+    let userRatingHtml = getUserRating(inputRating,id); // get new html
+    $(`#div${id}`).html(userRatingHtml); // append new html to the container div
+  } else {
+    $(`.error${id}`).empty();
+    $(`#div${id}`).append(`<p class='error${id}' style='clear:both'>${errorObj.error}</p>`);
+  }
+}
+
+function validateUserRating(rating) {
+  let errorObj = {
+    isError: null,
+    error: null
+  }
+  if (rating > 0 && rating < 10) {
+    errorObj.isError = false;
+  } else {
+    errorObj.isError = true;
+    errorObj.error = 'Rating must be a # between 0 and 10.';
+  }
+  return errorObj
+}
+
+function submitUserRatingToDb(rating,id) {
+  let queryObj = {
+    rating: rating,
+    id: id
+  }
+  $.ajax({
+    url: '/api/update-user-rating',
+    method: 'PUT',
+    data: queryObj
+  })
+  .then( data => console.log('data',data))
+  .catch( err => console.log('err',err))
+}
+
 function getActors(actors) {
-  console.log('actors',actors);
+  // console.log('actors',actors);
   return actors
 }
 
@@ -87,10 +132,6 @@ function pullMoviesFromDb(type) {
     .catch( err => console.log('err',err))
 }
 
-
-function addUserRating() {
-  console.log('adding user rating...');
-}
 
 // postMovie();
 
@@ -119,138 +160,3 @@ function postMovie() {
     })
     .catch( err => console.log(err))
 }
-
-
-// $(document).on("click", ".scrape-button", scrapeArticle);
-// $(document).on("click", ".clear-button", clearArticles);
-// $('body').on("click",'.article-card', articleClickHandler);
-// $('body').on("click", "#save-note", saveNote);
-
-function scrapeArticle() {
-    console.log('scraping...');
-    $.get("/scrape")
-        .then(function(data) {
-          console.log(data);
-          renderArticles();
-        })
-        .catch(function(err) {
-          return console.log(err);
-        })
-        // .then(renderArticles);
-
-    setTimeout(renderArticles,1000);
-    
-}
-
-function renderArticles() {
-    console.log('Articles rendering...');
-
-    // Grab the articles as a json
-    $.getJSON("/articles", function(data) {
-      console.log("here's some data", data[0]);
-      if (data[0]) {
-        $("#articleInput").empty();
-      }
-      
-      // For each one
-      for (var n = 0; n < data.length; n++) {
-        // console.log('this is data',data);
-
-        var $articleCard = '\
-          <div class="card article-card" data-id="' + data[n]._id + '">\
-            <div class="card-header d-flex">\
-              <img src="' + data[n].imgLink + '" alt="Picture Not Found" class="d-inline-block img-fluid">\
-              <h3 class="d-inline-block text-justify flex-fill header-padding">\
-                <a target="_blank" href="' + data[n].link + '">' + data[n].title + '</a>\
-              </h3>\
-            </div>\
-          </div>'
-        
-        $("#articleInput").append($articleCard);
-      }
-    });
-}
-
-function clearArticles() {
-  console.log('clearing articles...');
-  
-  $.get('/clear')
-    .then(function(data) {
-      console.log('cleared data',data);
-    })
-    .catch(function(err) {
-      return console.log('cleared data error',err);
-    })
-    // .then(renderArticles);
-  
-  $("#articleInput").html('<h3>No Articles To Show</h3>');
-
-}
-
-  
-function articleClickHandler() {
-  console.log('article clicked...');
-  console.log('this is this: ',this);
-
-  // Empty the notes from the note section
-  $("#notes-card").empty();
-  // Save the id from the element
-  var thisId = $(this).attr("data-id");
-  
-  // Now make an ajax call for the Article
-  $.ajax({
-      method: "GET",
-      url: "/articles/" + thisId
-    })
-    // With that done, add the note information to the page
-    .then(function(data) {
-      console.log('this is ajax data',data);
-
-      $('.article-title').text(data.title);
-      $('#note-user-input').html('\
-        <h6 class="card-text" id="note-title"></h6>\
-        <textarea type="text" id="note-input" style="width: 100%"></textarea>\
-        <button class="btn btn-submit" data-id="' + data._id + '" id="save-note">Submit</button>\
-        ');
-
-      // If there's a note in the article
-      if (data.note) {
-        // Place the title of the note in the title input
-        $("#note-title").val(data.note.title);
-        // Place the body of the note in the body textarea
-        $("#note-input").val(data.note.body);
-      }
-    })
-    .catch(function(err) {
-      if (err) throw err;
-    });
-}
-
-function saveNote() {
-  console.log('saving note...');
-  // Grab the id associated with the article from the submit button
-  var thisId = $(this).attr("data-id");
-
-  // Run a POST request to change the note, using what's entered in the inputs
-  $.ajax({
-    method: "POST",
-    url: "/articles/" + thisId,
-    data: {
-      // Value taken from title input
-      title: $("#note-title").val(),
-      // Value taken from note textarea
-      body: $("#note-input").val()
-    }
-  })
-    // With that done
-    .then(function(data) {
-      // Log the response
-      console.log(data);
-      // Empty the notes section
-      $("#note-user-input").empty();
-    });
-
-  // Also, remove the values entered in the input and textarea for note entry
-  $("#note-title").val("");
-  $("#note-input").val("");
-}  
