@@ -96,4 +96,21 @@ module.exports = function(app) {
       .then( data => console.log(`updated ${data} record`))
       .catch( err => console.log('err',err))
   })
+
+  app.put('/api/update-isWatched', function(req,res) {
+    console.log('req.body',req.body);
+
+    let updateWatched = req.body.isWatched;
+    let opposite = updateWatched === 'true' ? false : true;
+
+    db.Movie.update({
+      isWatched: opposite
+    },{
+      where: {
+        id: req.body.id
+      }
+    })
+      .then( data => console.log(`updated ${data} record`))
+      .catch( err => console.log('err',err))
+  })
 };

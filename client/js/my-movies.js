@@ -4,40 +4,83 @@ $(document).ready(handleMoviesOnLoad());
 
 
 async function handleMoviesOnLoad() {
+  let userId = sessionStorage.getItem('movieMasterId')
   let unwatchedMovies = await pullMoviesFromDb('unwatched');
   let watchedMovies = await pullMoviesFromDb('watched');
-  displayMovies(unwatchedMovies,'unwatched');
-  displayMovies(watchedMovies,'watched');
+  // if (unwatchedMovies.length === 0 && watchedMovies.length === 0) {
+  if (userId) {
+    displayMovies(unwatchedMovies,'unwatched');
+    displayMovies(watchedMovies,'watched');
+  } else {
+    $(`#movie-container`).html(`<h4 style='margin:auto'>Please signup and/or login to start tracking movies.</h4>`);
+  }
 }
 
 function displayMovies(array,type) {
+  $(`#${type}-movies`).empty();
   let $movieDiv = $('<div>');
-  for (let n=0; n < array.length; n++) {
-    let $movie = $('<div>');
-    $movie.html(`
-      <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
-        <div class='col-3 text-center'>
-          <img src=${array[n].posterUrl} width='100%' style='margin:10px 0'>
-        </div>
-        <div class='col-9'>
-          <div class='row'>
-            <div class='col-6'>
-              <h4 style="display:inline-block"><a href=${array[n].imdbUrl} target='_blank'><strong>${array[n].title}</strong></a></h4> <h5 style="display:inline-block">(${array[n].year})</h5>
-              <p>${array[n].maturityRating} | ${array[n].lengthInMinutes} min | ${array[n].genre}</p>
-            </div>
-            <div class='col-6 text-right'>
-              <p>IMDB Rating: <i class="fas fa-star"></i> ${array[n].imdbRating}</p>
-              ${getUserRating(array[n].userRating,array[n].id)}
-            </div>
+  if (array.length > 0) {
+    for (let n=0; n < array.length; n++) {
+      let $movie = $('<div>');
+      $movie.html(`
+        <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
+          <div class='col-3 text-center'>
+            <img src=${array[n].posterUrl} width='100%' style='margin:10px 0'>
           </div>
-          <p>${array[n].plot}</p>
-          <p>Director: ${array[n].director} | Stars: ${getActors(array[n].actors)}</p>
+          <div class='col-9'>
+            <div class='row'>
+              <div class='col-6'>
+                <h4 style="display:inline-block"><a href=${array[n].imdbUrl} target='_blank'><strong>${array[n].title}</strong></a></h4> <h5 style="display:inline-block">(${array[n].year})</h5>
+                <p>${array[n].maturityRating} | ${array[n].lengthInMinutes} min | ${array[n].genre}</p>
+              </div>
+              <div class='col-6 text-right'>
+                <p>IMDB Rating: <i class="fas fa-star"></i> ${array[n].imdbRating}</p>
+                ${getUserRating(array[n].userRating,array[n].id)}
+              </div>
+            </div>
+            <p>${array[n].plot}</p>
+            <p>Director: ${array[n].director} | Stars: ${getActors(array[n].actors)}</p>
+          </div>
+          <div class='col-12 d-inline-flex p-1 justify-content-around'>
+            <button class='btn btn-info btn-sm markAsWatched' data-isWatched='${array[n].isWatched}' data-id='${array[n].id}'>Mark as ${watchedOrUnwatched(array[n].isWatched)}</button>
+            <button class='btn btn-info btn-sm'>Remove from List</button>
+          </div>
         </div>
-      </div>
-    `)
-    $movieDiv.append($movie);
+      `)
+      $movieDiv.append($movie);
+    }
+  } else {
+    $movieDiv.text('No movies to show.');
   }
   $(`#${type}-movies`).append($movieDiv);
+}
+
+function watchedOrUnwatched(isWatched) {
+  if (isWatched) {
+    return `unwatched`
+  } else {
+    return `watched`
+  }
+}
+
+$('body').on('click','.markAsWatched',markAsWatched);
+
+function markAsWatched() {
+  let id = $(this).attr('data-id');
+  let isWatched = $(this).attr('data-isWatched');
+
+  let queryObj = {
+    id: id,
+    isWatched: isWatched
+  }
+  $.ajax({
+    url: '/api/update-isWatched',
+    method: 'PUT',
+    data: queryObj,
+    timeout: 1000 * 3
+  })
+  .catch( err => console.log('err',err))
+  handleMoviesOnLoad();
 }
 
 function getUserRating(rating,id) {
@@ -105,7 +148,8 @@ function submitUserRatingToDb(rating,id) {
   $.ajax({
     url: '/api/update-user-rating',
     method: 'PUT',
-    data: queryObj
+    data: queryObj,
+    timeout: 1000 * 3
   })
   .then( data => console.log('data',data))
   .catch( err => console.log('err',err))
@@ -118,7 +162,8 @@ function getActors(actors) {
 
 function pullMoviesFromDb(type) {
   let queryObj = {
-    isWatched: null
+    isWatched: null,
+    UserId: sessionStorage.getItem('movieMasterId')
   }
   if (type === 'watched') {
     queryObj.isWatched = 1
