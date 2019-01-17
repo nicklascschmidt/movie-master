@@ -113,4 +113,14 @@ module.exports = function(app) {
       .then( data => console.log(`updated ${data} record`))
       .catch( err => console.log('err',err))
   })
+
+  app.delete('/api/remove-movie-from-db', function(req,res) {
+    console.log('req.body',req.body);
+
+    db.Movie.destroy({
+      where: req.body
+    })
+      .then( data => console.log(`updated ${data} record`))
+      .catch( err => console.log('err',err))
+  })
 };

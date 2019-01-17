@@ -7,7 +7,6 @@ async function handleMoviesOnLoad() {
   let userId = sessionStorage.getItem('movieMasterId')
   let unwatchedMovies = await pullMoviesFromDb('unwatched');
   let watchedMovies = await pullMoviesFromDb('watched');
-  // if (unwatchedMovies.length === 0 && watchedMovies.length === 0) {
   if (userId) {
     displayMovies(unwatchedMovies,'unwatched');
     displayMovies(watchedMovies,'watched');
@@ -42,8 +41,8 @@ function displayMovies(array,type) {
             <p>Director: ${array[n].director} | Stars: ${getActors(array[n].actors)}</p>
           </div>
           <div class='col-12 d-inline-flex p-1 justify-content-around'>
-            <button class='btn btn-info btn-sm markAsWatched' data-isWatched='${array[n].isWatched}' data-id='${array[n].id}'>Mark as ${watchedOrUnwatched(array[n].isWatched)}</button>
-            <button class='btn btn-info btn-sm'>Remove from List</button>
+            <button class='btn btn-info btn-sm markAsWatched' data-isWatched='${array[n].isWatched}' data-id='${array[n].id}'>${watchedOrUnwatched(array[n].isWatched)}</button>
+            <button class='btn btn-info btn-sm removeFromList' data-id='${array[n].id}'><i class="fas fa-trash-alt"></i> Remove from List</button>
           </div>
         </div>
       `)
@@ -55,11 +54,30 @@ function displayMovies(array,type) {
   $(`#${type}-movies`).append($movieDiv);
 }
 
+$('body').on('click','.removeFromList',removeFromList);
+
+function removeFromList() {
+  let id = $(this).attr('data-id');
+  let queryObj = {
+    id: id
+  }
+  $.ajax({
+    url: '/api/remove-movie-from-db',
+    method: 'DELETE',
+    data: queryObj,
+    timeout: 1000 * 3,
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('ajax error',textStatus, errorThrown);
+    }
+  })
+  handleMoviesOnLoad();
+}
+
 function watchedOrUnwatched(isWatched) {
   if (isWatched) {
-    return `unwatched`
+    return `<i class="fas fa-eye-slash"></i> Mark as unwatched`
   } else {
-    return `watched`
+    return `<i class="fas fa-eye"></i> Mark as watched`
   }
 }
 
@@ -77,7 +95,10 @@ function markAsWatched() {
     url: '/api/update-isWatched',
     method: 'PUT',
     data: queryObj,
-    timeout: 1000 * 3
+    timeout: 1000 * 3,
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('ajax error',textStatus, errorThrown);
+    }
   })
   .catch( err => console.log('err',err))
   handleMoviesOnLoad();
@@ -149,9 +170,11 @@ function submitUserRatingToDb(rating,id) {
     url: '/api/update-user-rating',
     method: 'PUT',
     data: queryObj,
-    timeout: 1000 * 3
+    timeout: 1000 * 3,
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('ajax error',textStatus, errorThrown);
+    }
   })
-  .then( data => console.log('data',data))
   .catch( err => console.log('err',err))
 }
 
