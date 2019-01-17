@@ -18,7 +18,7 @@ require("./routes/api-routes")(app);
 
 const db = require("./models");
 
-const force = { force: true} // true resets db
+const force = { force: false} // true resets db
 
 db.sequelize.sync(force).then(function() {
   app.listen(PORT, function() {

@@ -1,13 +1,117 @@
 console.log('Lieutenant, we are connected and ready to rumble.');
 
-$(document).ready(showUnwatchedMovies);
+$(document).ready(handleMoviesOnLoad());
+$('body').on('click','.addUserRating',addUserRating);
 
-function showUnwatchedMovies() {
+
+async function handleMoviesOnLoad() {
+  let unwatchedMovies = await pullMoviesFromDb('unwatched');
+  let watchedMovies = await pullMoviesFromDb('watched');
+  displayMovies(unwatchedMovies,'unwatched');
+  displayMovies(watchedMovies,'watched');
+}
+
+function displayMovies(array,type) {
+  console.log('array',array);
+  let $movieDiv = $('<div>');
+  for (let n=0; n < array.length; n++) {
+    let movie = {
+      title: array[n].title,
+      imdbUrl: array[n].imdbUrl,
+      posterUrl: array[n].posterUrl,
+      year: array[n].year,
+      maturityRating: array[n].maturityRating,
+      lengthInMinutes: array[n].lengthInMinutes,
+      imdbRating: array[n].imdbRating,
+      plot: array[n].plot,
+      director: array[n].director,
+      actors: array[n].actors,
+      genre: array[n].genre,
+      userRating: array[n].userRating
+    }
+    console.log(movie);
+    let $movie = $('<div>');
+    $movie.html(`
+      <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
+        <div class='col-3'>
+          <img src=${array[n].posterUrl} width='100%'>
+        </div>
+        <div class='col-9'>
+          <div class='row'>
+            <div class='col-6'>
+              <h4 style="display:inline-block"><a href=${array[n].imdbUrl} target='_blank'><strong>${array[n].title}</strong></a></h4> <h5 style="display:inline-block">(${array[n].year})</h5>
+              <p>${array[n].maturityRating} | ${array[n].lengthInMinutes} min | ${array[n].genre}</p>
+            </div>
+            <div class='col-6 text-right'>
+              <p>IMDB Rating: <i class="fas fa-star"></i> ${array[n].imdbRating}</p>
+              ${getUserRating(array[n].userRating)}
+            </div>
+          </div>
+          <p>${array[n].plot}</p>
+          <p>Director: ${array[n].director} | Stars: ${getActors(array[n].actors)}</p>
+        </div>
+      </div>
+    `)
+    $movieDiv.append($movie);
+  }
+  $(`#${type}-movies`).append($movieDiv);
+  
+}
+
+function getUserRating(rating) {
+  if (rating !== null) {
+    return `<p>My Rating: <i class="far fa-star"></i> ${rating}</p>`
+  } else {
+    return `<button class='btn btn-info btn-sm addUserRating'>rate</button>`
+  }
+}
+
+function getActors(actors) {
+  console.log('actors',actors);
+  return actors
+}
+
+function pullMoviesFromDb(type) {
+  let queryObj = {
+    isWatched: null
+  }
+  if (type === 'watched') {
+    queryObj.isWatched = 1
+  } else if (type === 'unwatched') {
+    queryObj.isWatched = 0
+  } else {
+    // nothing
+  }
+  return $.get('/api/get-all-movies',queryObj)
+    .then( response => response)
+    .catch( err => console.log('err',err))
+}
+
+
+function addUserRating() {
+  console.log('adding user rating...');
+}
+
+// postMovie();
+
+function postMovie() {
   let userId = sessionStorage.getItem('movieMasterId');
   let movie = {
     UserId: userId,
-    title: 'some movie',
-    isWatched: true
+    title: 'godfather',
+    imdbUrl: 'something.com',
+    posterUrl: 'https://m.media-amazon.com/images/M/MV5BMTg2MzI1MTg3OF5BMl5BanBnXkFtZTgwNTU3NDA2MTI@._V1_SX300.jpg',
+    year: '1999',
+    maturityRating: 'R',
+    lengthInMinutes: 100,
+    imdbRating: 9.5,
+    plot: 'Pysch Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham. The Dark Knight must accept one of the greatest psychological and physical tests of his ability to fight injustice.',
+    director: 'Someone',
+    actors: 'guy1 ayo, some guy3, guy4',
+    genre: 'action',
+
+    isWatched: false,
+    userRating: 8.5
   }
   $.post('/api/get-movies',movie)
     .then( () => {

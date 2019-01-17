@@ -7,41 +7,82 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     title: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0,300]
+      }
     },
-    // imdbUrl: {
-    //   type: DataTypes.STRING
-    // },
-    // year: {
-    //   type: DataTypes.INTEGER
-    // },
-    // maturityRating: {
-    //   type: DataTypes.STRING
-    // },
-    // lengthInMinutes: {
-    //   type: DataTypes.INTEGER
-    // },
-    // imdbRating: {
-    //   type: DataTypes.INTEGER
-    // },
-    // plot: {
-    //   type: DataTypes.TEXT,
-    //   validate: {
-    //     len: [0,2000]
-    //   }
-    // },
-    // director: {
-    //   type: DataTypes.STRING
-    // },
-    // actors: {
-    //   type: DataTypes.ARRAY(DataTypes.STRING)
-    // },
-
+    imdbUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0,1000]
+      }
+    },
+    posterUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0,1000]
+      }
+    },
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    maturityRating: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0,10]
+      }
+    },
+    lengthInMinutes: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    imdbRating: {
+      type: DataTypes.DECIMAL(10,1),
+      allowNull: false,
+    },
+    plot: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        len: [0,2000]
+      }
+    },
+    director: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0,100]
+      }
+    },
+    actors: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        len: [0,500]
+      }
+    },
+    genre: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [0,100]
+      }
+    },
 
     isWatched: {
-      type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    userRating: {
+      type: DataTypes.DECIMAL(10,1),
+      allowNull: true
     }
-
   });
 
   Movie.associate = function(models) {

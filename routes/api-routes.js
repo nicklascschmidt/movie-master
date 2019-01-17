@@ -28,10 +28,7 @@ module.exports = function(app) {
   app.get('/api/find-user', function(req,res) {
     // console.log('req.query',req.query);
     db.User.findOne({
-      where: {
-        username: req.query.username,
-        password: req.query.password
-      }
+      where: req.query
     }).then(data => {
       res.json(data);
     }).catch(err => {
@@ -43,11 +40,10 @@ module.exports = function(app) {
   // Add a movie to to-do list
   app.post('/api/get-movies', function(req,res) {
     console.log('req.body',req.body);
-    db.Movie.create({
-      UserId: req.body.UserId,
-      title: req.body.title,
-      isWatched: req.body.isWatched
-    }).then( () => {
+
+    db.Movie.create(
+      req.body
+    ).then( () => {
       res.end();
     }).catch(err => {
       console.log(err);
@@ -55,4 +51,35 @@ module.exports = function(app) {
     })
   })
 
+  // Get all movies
+  app.get('/api/get-all-movies', function(req,res) {
+    console.log('req.query',req.query);
+    db.Movie.findAll({
+      where: req.query
+    })
+      .then( data => {
+        res.json(data);
+      }).catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+      })
+  })
+  
+  // Get one movie
+  app.get('/api/get-movie', function(req,res) {
+    console.log('req.body',req.body);
+    console.log('req.query',req.query);
+
+    db.Movie.findOne({
+      where: {
+        title: req.query.title
+      }
+    })
+      .then( () => {
+        res.end();
+      }).catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+      })
+  })
 };
