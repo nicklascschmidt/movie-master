@@ -33,8 +33,8 @@ function displayMovies(array,type) {
     let $movie = $('<div>');
     $movie.html(`
       <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
-        <div class='col-3'>
-          <img src=${array[n].posterUrl} width='100%'>
+        <div class='col-3 text-center'>
+          <img src=${array[n].posterUrl} width='100%' style='margin:10px 0'>
         </div>
         <div class='col-9'>
           <div class='row'>
