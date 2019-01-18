@@ -38,7 +38,7 @@ module.exports = function(app) {
   });
 
   // Add a movie to to-do list
-  app.post('/api/get-movies', function(req,res) {
+  app.post('/api/add-movie-to-watchlist', function(req,res) {
     // console.log('req.body',req.body);
 
     db.Movie.create(
