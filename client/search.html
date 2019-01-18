@@ -30,28 +30,31 @@
     <h4>Search for movies with the tools provided below</h4>
   </div>
 
-  <div class='container-fluid row'>
-    <div class='article-container col-4'>
-      <div id='articleInput'>
-          <h3>No Articles To Show</h3>
-          <!-- article input goes here -->
+  <div id='movie-container' class='container-fluid row'>
+    <div class='col-6'>
+      <div class='card'>
+        <div class='card-header' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+          <h3>Scrape</h3>
+        </div>
+        <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
+          <button id='scrapeImdb' class='btn btn-default'>scrape</button>
+          <div id='unwatched-movies'></div>
+        </div>
       </div>
     </div>
-    <div class='col-4'>
+    <div class='col-6'>
       <div class='card'>
-        <div class='card-header'>
-          <h3>Notes</h3>
+        <div class='card-header' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+          <h3>Search</h3>
         </div>
-        <div class='card-body'>
-          <h4 class='card-title article-title'>No Article Selected</h4>
-          <div id='note-user-input'>
-
-          </div>
+        <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
+          <div id='watched-movies'></div>
         </div>
       </div>
     </div>
   </div>
   
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-  <script src='/logic.js'></script>
+  <script type='text/javascript' src='/config.js'></script>
+  <script type='text/javascript' src='/js/search.js'></script>
 </body>

@@ -96,9 +96,9 @@ function markAsWatched() {
     method: 'PUT',
     data: queryObj,
     timeout: 1000 * 3,
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log('ajax error',textStatus, errorThrown);
-    }
+    // error: function(jqXHR, textStatus, errorThrown) {
+    //   console.log('ajax error',textStatus, errorThrown);
+    // }
   })
   .catch( err => console.log('err',err))
   handleMoviesOnLoad();
@@ -152,7 +152,7 @@ function validateUserRating(rating) {
     isError: null,
     error: null
   }
-  if (rating > 0 && rating < 10) {
+  if (rating >= 0 && rating <= 10) {
     errorObj.isError = false;
   } else {
     errorObj.isError = true;

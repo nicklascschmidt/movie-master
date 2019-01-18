@@ -6,6 +6,7 @@ module.exports = {
     host: '127.0.0.1',
     dialect: 'mysql'
   },
+  OMDB_API_KEY: 'b3b5a67e',
   test: {
     username: 'root',
     password: '',

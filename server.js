@@ -15,6 +15,7 @@ app.use(express.static("client"));
 
 require("./routes/html-routes")(app);
 require("./routes/api-routes")(app);
+require("./routes/scrape-routes")(app);
 
 const db = require("./models");
 
