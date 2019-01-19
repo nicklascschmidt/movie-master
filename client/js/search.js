@@ -6,7 +6,7 @@ const omdbApiKey = config.OMDB_API_KEY;
 // Dropdown clicked
 $('body').on('click','.scrapeImdb', function() {
   let pageStart = $(this).attr('data-pageStart'); // grab page
-  $('#scrapeDisplay').html('<h4>Loading movies...</h4>'); // loading message
+  $('#scrapeDisplay').html('<h4>Loading movies (takes a few seconds)...</h4>'); // loading message
   scrapeImdb(pageStart);
 });
 
@@ -98,14 +98,13 @@ $('body').on('click','.handleAddToWatchlist',handleAddToWatchlist);
 async function handleAddToWatchlist() {
   let imdbId = $(this).attr('data-imdbId') // get movie ID to search IMDB db (via unique URL)
   let userId = sessionStorage.getItem('movieMasterId');
-  addMovieToDb(imdbId,userId);
-  
-  let title = $(this).attr('data-title');
-  let watchlistButton = await loadAddToWatchlistButton(title,imdbId);
-  console.log('$(this)',$(this))
-  console.log('watchlistButton',watchlistButton);
-  // $(this).empty().html('<p>Added to Watchlist</p>');
-  $(this).replaceWith('<p>Added to Watchlist</p>');
+  console.log('userId',userId);
+  if (userId !== null) {
+    addMovieToDb(imdbId,userId);
+    $(this).replaceWith(`<p style='color:green'>Added to Watchlist</p>`);
+  } else {
+    $(this).replaceWith(`<p style='color:red'>Need to create an account</p>`);
+  }
 }
 
 async function addMovieToDb(imdbId,userId) {

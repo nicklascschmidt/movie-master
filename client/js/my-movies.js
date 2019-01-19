@@ -143,7 +143,7 @@ function submitUserRating() {
     $(`#div${id}`).html(userRatingHtml); // append new html to the container div
   } else {
     $(`.error${id}`).empty();
-    $(`#div${id}`).append(`<p class='error${id}' style='clear:both'>${errorObj.error}</p>`);
+    $(`#div${id}`).append(`<p class='error${id}' style='clear:both; color:red'>${errorObj.error}</p>`);
   }
 }
 
@@ -170,7 +170,6 @@ function submitUserRatingToDb(rating,id) {
     url: '/api/update-user-rating',
     method: 'PUT',
     data: queryObj,
-    timeout: 1000 * 3,
     error: function(jqXHR, textStatus, errorThrown) {
       console.log('ajax error',textStatus, errorThrown);
     }
