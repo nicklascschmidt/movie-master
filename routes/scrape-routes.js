@@ -5,7 +5,7 @@ module.exports = function(app) {
 
   app.get("/scrape/imdb", async function(req, res) {
     let imdbArray = [];
-    let array = await axios.get("https://www.imdb.com/search/title?groups=top_250&sort=user_rating").then(function(response) {
+    let array = await axios.get(`https://www.imdb.com/search/title?groups=top_250&sort=user_rating,desc&start=${req.query.pageStart}`).then(function(response) {
       if (response.status === 200) {
         var $ = cheerio.load(response.data);
         $("div.lister-item").each(function(i, element) {
@@ -21,7 +21,6 @@ module.exports = function(app) {
       }
     });
   
-    // Send a "Scrape Complete" message to the browser
     res.send(array);
-  }); // close app.get
+  });
 };

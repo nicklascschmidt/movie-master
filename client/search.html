@@ -5,8 +5,11 @@
   <title>Movie Master</title>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <!-- Bootstrap (bootswatch Materia theme), Icons -->
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/materia/bootstrap.min.css'/>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  
   <link rel='stylesheet' type='text/css' href='/style.css'>
 </head>
 
@@ -34,11 +37,22 @@
   <div id='movie-container' class='container-fluid row'>
     <div class='col-6'>
       <div class='card'>
-        <div class='card-header' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
-          <h3>Scrape</h3>
+        <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+          <h3>Scrape IMDB Top 250</h3>
+          <div class="dropdown">
+            <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Scrape
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='1'>Page 1</p>
+              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='51'>Page 2</p>
+              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='101'>Page 3</p>
+              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='151'>Page 4</p>
+              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='201'>Page 5</p>
+            </div>
+          </div>
         </div>
         <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
-          <button id='scrapeImdb' class='btn btn-default'>scrape</button>
           <div id='scrapeDisplay'></div>
         </div>
       </div>
@@ -55,7 +69,11 @@
     </div>
   </div>
   
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  
   <script type='text/javascript' src='/config.js'></script>
   <script type='text/javascript' src='/js/search.js'></script>
 </body>

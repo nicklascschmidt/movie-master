@@ -2,13 +2,6 @@ var db = require('../models');
 
 module.exports = function(app) {
 
-  // app.get("/api/all", function(req, res) {
-  //   User.findAll({}).then(function(results) {
-  //     res.json(results);
-  //   });
-  // });
-
-
   // Add a user
   app.post('/api/new-user', function(req, res) {
     // console.log('req.body',req.body);
@@ -83,6 +76,7 @@ module.exports = function(app) {
       })
   })
 
+  // Change the user rating
   app.put('/api/update-user-rating', function(req,res) {
     // console.log('req.body',req.body);
 
@@ -93,12 +87,15 @@ module.exports = function(app) {
         id: req.body.id
       }
     })
-      .then( data => console.log(`updated ${data} record`))
+      .then( data => {
+        // console.log(`updated ${data} record`)
+      })
       .catch( err => console.log('err',err))
   })
 
+  // Mark a movie watched or unwatched
   app.put('/api/update-isWatched', function(req,res) {
-    console.log('req.body',req.body);
+    // console.log('req.body',req.body);
 
     let updateWatched = req.body.isWatched;
     let opposite = updateWatched === 'true' ? false : true;
@@ -110,10 +107,35 @@ module.exports = function(app) {
         id: req.body.id
       }
     })
-      .then( data => console.log(`updated ${data} record`))
+      .then( data => {
+        // console.log(`updated ${data} record`)
+      })
       .catch( err => console.log('err',err))
   })
 
+  app.get('/api/check-duplicate', function(req,res) {
+    // console.log('req.query',req.query);
+    let title = req.query.title;
+    let userId = req.query.UserId;
+    db.Movie.findOne({
+      where: {
+        title: title,
+        UserId: userId
+      }
+    })
+      .then( data => {
+        if (data !== null) {
+          res.send(true);
+        } else {
+          res.send(false);
+        }
+      }).catch(err => {
+        console.log(err);
+        res.end();
+      })
+  })
+
+  // Delete from DB
   app.delete('/api/remove-movie-from-db', function(req,res) {
     console.log('req.body',req.body);
 

@@ -28,11 +28,11 @@ function displayMovies(array,type) {
           </div>
           <div class='col-9'>
             <div class='row'>
-              <div class='col-6'>
+              <div class='col-7'>
                 <h4 style="display:inline-block"><a href=${array[n].imdbUrl} target='_blank'><strong>${array[n].title}</strong></a></h4> <h5 style="display:inline-block">(${array[n].year})</h5>
                 <p>${array[n].maturityRating} | ${array[n].lengthInMinutes} min | ${array[n].genre}</p>
               </div>
-              <div class='col-6 text-right'>
+              <div class='col-5 text-right'>
                 <p>IMDB Rating: <i class="fas fa-star"></i> ${array[n].imdbRating}</p>
                 ${getUserRating(array[n].userRating,array[n].id)}
               </div>
