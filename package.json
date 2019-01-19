@@ -1,7 +1,7 @@
 {
   "name": "movie-master",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/nicklascschmidt/movie-master.git",
   "author": "Nicklas",
   "license": "MIT",
