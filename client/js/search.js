@@ -87,7 +87,7 @@ function checkIfDuplicate(userId,title) {
 }
 
 function pullMovieFromOmdb(imdbId) {
-  return $.get(`http://www.omdbapi.com/?apikey=${omdbApiKey}&i=${imdbId}`)
+  return $.get(`https://www.omdbapi.com/?apikey=${omdbApiKey}&i=${imdbId}`)
     .then(response => response)
     .catch(err => console.log('err',err));
 }
