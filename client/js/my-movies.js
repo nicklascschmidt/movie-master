@@ -95,7 +95,7 @@ function markAsWatched() {
     url: '/api/update-isWatched',
     method: 'PUT',
     data: queryObj,
-    timeout: 1000 * 3,
+    timeout: 1000 * 5,
     // error: function(jqXHR, textStatus, errorThrown) {
     //   console.log('ajax error',textStatus, errorThrown);
     // }
