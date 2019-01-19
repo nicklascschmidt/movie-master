@@ -1,7 +1,13 @@
 console.log('Lieutenant, we are connected and ready to rumble.');
 
+
 const omdbApiKey = config.OMDB_API_KEY;
 // const omdbApiKey = process.env.OMDB_API_KEY;
+
+
+// ------------------------------------------------------------------
+//              Scrape
+// ------------------------------------------------------------------
 
 // Dropdown clicked
 $('body').on('click','.scrapeImdb', function() {
@@ -92,6 +98,10 @@ function pullMovieFromOmdb(imdbId) {
     .catch(err => console.log('err',err));
 }
 
+// ------------------------------------------------------------------
+//              Add to watchlist
+// ------------------------------------------------------------------
+
 // Add to watchlist button handler
 $('body').on('click','.handleAddToWatchlist',handleAddToWatchlist);
 
@@ -132,3 +142,9 @@ async function addMovieToDb(imdbId,userId) {
     })
     .catch( err => console.log(err))
 }
+
+// ------------------------------------------------------------------
+//              Search
+// ------------------------------------------------------------------
+
+

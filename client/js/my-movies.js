@@ -105,8 +105,9 @@ function markAsWatched() {
 }
 
 function getUserRating(rating,id) {
+  let ratingFormatted = parseFloat(rating).toFixed(1);
   if (rating !== null) {
-    return `<p>My Rating: <i class="far fa-star"></i> ${rating}</p>`
+    return `<p>My Rating: <i class="far fa-star"></i> ${ratingFormatted}</p>`
   } else {
     return `<div class='switchToUserRatingForm text-right' data-id='${id}'><button class='btn btn-info btn-sm'>rate</button></div>`
   }
@@ -116,14 +117,14 @@ $('body').on('click','.switchToUserRatingForm',switchToUserRatingForm);
 
 function switchToUserRatingForm() {
   let id = $(this).attr('data-id');
-  $(this).removeClass(); // allows user to access input field
-  $(this).attr('id',`div${id}`); // set ID so we can clear the form after submitting
-  $(this).html(`
-    <form class='form-inline float-right'>
-      <label class="sr-only" for="inlineFormInputName2">Name</label>
-      <input type='text' class='form-control form-control-sm' placeholder='#' id='input${id}' style='width:30px'>
-      <button type='submit' class='submitUserRating btn btn-info btn-sm ml-3' data-id='${id}'>Submit</button>
-    </form>
+  $(this).replaceWith(`
+    <div class='' id='div${id}'>
+      <form class='form-inline float-right'>
+        <label class="sr-only" for="inlineFormInputName2">Name</label>
+        <input type='text' class='form-control form-control-sm' placeholder='#' id='input${id}' style='width:30px'>
+        <button type='submit' class='submitUserRating btn btn-info btn-sm ml-3' data-id='${id}'>Submit</button>
+      </form>
+    </div>
   `)
 }
 
