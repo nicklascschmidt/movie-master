@@ -1,6 +1,7 @@
 console.log('Lieutenant, we are connected and ready to rumble.');
 
-const omdbApiKey = config.OMDB_API_KEY;
+// const omdbApiKey = config.OMDB_API_KEY;
+const omdbApiKey = process.env.OMDB_API_KEY;
 
 // Dropdown clicked
 $('body').on('click','.scrapeImdb', function() {
