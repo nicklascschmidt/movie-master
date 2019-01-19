@@ -15,7 +15,6 @@ app.use(bodyParser.json());
 // Make public a static folder
 app.use(express.static(path.join(__dirname, 'client')))
 
-
 require("./routes/html-routes")(app);
 require("./routes/api-routes")(app);
 require("./routes/scrape-routes")(app);
