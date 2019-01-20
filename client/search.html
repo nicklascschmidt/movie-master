@@ -59,11 +59,15 @@
     </div>
     <div class='col-6'>
       <div class='card'>
-        <div class='card-header' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+        <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
           <h3>Search</h3>
+          <form class='form-inline'>
+            <input type='text' class='form-control form-control-sm' placeholder='search...' id='searchInput' style='color:white'>
+            <button type='submit' class='btn btn-info btn-sm ml-3' id='searchInputSubmit'>Search</button>
+          </form>
         </div>
         <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
-          <div id='watched-movies'></div>
+          <div id='searchDisplay'></div>
         </div>
       </div>
     </div>

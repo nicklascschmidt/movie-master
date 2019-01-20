@@ -33,7 +33,7 @@ function handleSignup() {
     submitSignupToDb(user);
   } else {
     for (let n=0; n < errorResult.errors.length; n++) {
-      $('#signupInputError').append(`<p>${errorResult.errors[n]}</p>`);
+      $('#signupInputError').append(`<p style='color:red'>${errorResult.errors[n]}</p>`);
     }
   }
 }
@@ -105,7 +105,7 @@ async function validateLogin() {
   if (userObj !== null) {
     welcomeUser(userObj);
   } else {
-    $('#loginInputError').html(`<p>User profile not found. Please re-enter login credentials or sign up for an account.</p>`);
+    $('#loginInputError').html(`<p style='color:red'>User profile not found. Please re-enter login credentials or sign up for an account.</p>`);
   }
 }
 

@@ -30,15 +30,16 @@ function scrapeImdb(page) {
     },
     success: data => {
       let imdbArray = data;
-      displayMovies(imdbArray)
+      displayMovies(imdbArray,'scrapeDisplay')
     }
   })
 }
 
-async function displayMovies(array) {
+async function displayMovies(array,element) {
   let $movieDiv = $('<div>');
   for (let n=0; n < array.length; n++) {
-    let movie = await pullMovieFromOmdb(array[n]);
+    // console.log('array[n]',array[n])
+    let movie = await pullMovieFromOmdb(array[n],'id');
     let watchlistButton = await loadAddToWatchlistButton(movie.Title,movie.imdbID);
     let $movie = $('<div>');
     $movie.html(`
@@ -65,7 +66,7 @@ async function displayMovies(array) {
     $movieDiv.append($movie);
   }
 
-  $(`#scrapeDisplay`).empty().append($movieDiv); // clear loading message then add movies
+  $(`#${element}`).empty().append($movieDiv); // clear loading message then add movies
 }
 
 async function loadAddToWatchlistButton(title,imdbID) {
@@ -92,8 +93,16 @@ function checkIfDuplicate(userId,title) {
     .catch( err => console.log(err))
 }
 
-function pullMovieFromOmdb(imdbId) {
-  return $.get(`https://www.omdbapi.com/?apikey=${omdbApiKey}&i=${imdbId}`)
+function pullMovieFromOmdb(searchValue,type) {
+  let searchType = null;
+  if (type === 'id') {
+    searchType = 'i';
+  } else if (type === 'title') {
+    searchType = 's'
+  } else {
+    // nothing
+  }
+  return $.get(`https://www.omdbapi.com/?apikey=${omdbApiKey}&${searchType}=${searchValue}`)
     .then(response => response)
     .catch(err => console.log('err',err));
 }
@@ -118,7 +127,7 @@ async function handleAddToWatchlist() {
 }
 
 async function addMovieToDb(imdbId,userId) {
-  let omdbMovie = await pullMovieFromOmdb(imdbId);
+  let omdbMovie = await pullMovieFromOmdb(imdbId,'id');
   let runtimeUpdated = omdbMovie.Runtime.replace(/\D+/g, '');
   let movie = {
     UserId: Number(userId),
@@ -147,4 +156,24 @@ async function addMovieToDb(imdbId,userId) {
 //              Search
 // ------------------------------------------------------------------
 
+$('body').on('click','#searchInputSubmit',submitSearch);
 
+
+async function submitSearch() {
+  event.preventDefault();
+
+  // first get array of movies and grab the imdbId
+  let searchTerm = $('#searchInput').val().trim();
+  let omdbMovieArray = await pullMovieFromOmdb(searchTerm,'title'); // search results don't give the full object
+  // console.log('omdbMovieArray.Search',omdbMovieArray.Search)
+  let splicedArray = (omdbMovieArray.Search.length > 10) ? omdbMovieArray.Search.splice(0,10) : omdbMovieArray.Search; // limit the search results to 10
+  
+  let imdbIdArray = [];
+  for (let n=0; n < splicedArray.length; n++) {
+    imdbIdArray.push(splicedArray[n].imdbID);
+  }
+  
+  // then use the array of imdbIds to get an array of Movies with full props
+  $('#searchDisplay').html('<h4>Loading movies (takes a second)...</h4>'); // loading message
+  displayMovies(imdbIdArray,'searchDisplay');
+}

@@ -120,7 +120,6 @@ function switchToUserRatingForm() {
   $(this).replaceWith(`
     <div class='' id='div${id}'>
       <form class='form-inline float-right'>
-        <label class="sr-only" for="inlineFormInputName2">Name</label>
         <input type='text' class='form-control form-control-sm' placeholder='#' id='input${id}' style='width:30px'>
         <button type='submit' class='submitUserRating btn btn-info btn-sm ml-3' data-id='${id}'>Submit</button>
       </form>
