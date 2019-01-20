@@ -100,7 +100,7 @@ function markAsWatched() {
     //   console.log('ajax error',textStatus, errorThrown);
     // }
   })
-  .catch( err => console.log('err',err))
+  .catch( err => err)
   handleMoviesOnLoad();
 }
 
