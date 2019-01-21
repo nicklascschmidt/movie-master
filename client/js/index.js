@@ -116,13 +116,20 @@ function checkDbForLoginCredentials(user) {
 }
 
 function welcomeUser(user) {
-  $('#userForms').html(`<div class="container-fluid text-center"><h2>Welcome ${user.username}!</h2><h4>Taking you to the My Movies page...</h4></div>`);
-
-  sessionStorage.setItem('movieMasterId',user.id); // stores user's ID in session storage - accessible on other pages
-  setTimeout(rerouteUser,3 * 1000);
-}
-
-function rerouteUser() {
-  window.location = '/my-movies.html'; // bring user to the my movies page
+  let countdownNum = 5;
+  $('#userForms').html(`<div class="container-fluid text-center"><h2>Welcome ${user.username}!</h2><h4 id='countdownRedirect' data-countdown='5'>Taking you to the My Movies page in ${countdownNum}</h4></div>`);
+  
+  setInterval(countdownRedirect,1000);
+  
+  function countdownRedirect() {
+    countdownNum--;
+    
+    if (countdownNum === 0) {
+      sessionStorage.setItem('movieMasterId',user.id); // stores user's ID in session storage - accessible on other pages
+      window.location = '/my-movies.html'; // bring user to the my movies page
+    } else {
+      $('#countdownRedirect').text(`Taking you to the My Movies page in ${countdownNum}`);
+    }
+  }
 }
 
