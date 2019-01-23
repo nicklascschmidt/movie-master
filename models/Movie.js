@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Movie = sequelize.define('Movie', {
+  let Movie = sequelize.define('Movie', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -86,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Movie.associate = function(models) {
-    models.Movie.belongsTo(models.User, {
+    Movie.belongsTo(models.User, {
       foreignKey: {
         allowNull: false
       }

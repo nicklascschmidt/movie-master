@@ -170,7 +170,7 @@ function submitUserRatingToDb(rating,id) {
     url: '/api/update-user-rating',
     method: 'PUT',
     data: queryObj,
-    error: function(jqXHR, textStatus, errorThrown) {
+    error: (jqXHR, textStatus, errorThrown) => {
       console.log('ajax error',textStatus, errorThrown);
     }
   })

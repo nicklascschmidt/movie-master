@@ -10,7 +10,7 @@ const omdbApiKey = config.OMDB_API_KEY;
 // ------------------------------------------------------------------
 
 // Dropdown clicked
-$('body').on('click','.scrapeImdb', function() {
+$('body').on('click','.scrapeImdb', () => {
   let pageStart = $(this).attr('data-pageStart'); // grab page
   $('#scrapeDisplay').html('<h4>Loading movies (takes a few seconds)...</h4>'); // loading message
   scrapeImdb(pageStart);
@@ -25,7 +25,7 @@ function scrapeImdb(page) {
     method: 'GET',
     data: queryObj,
     timeout: 1000 * 3,
-    error: function(jqXHR, textStatus, errorThrown) {
+    error: (jqXHR, textStatus, errorThrown) => {
       console.log('ajax error',textStatus, errorThrown);
     },
     success: data => {
@@ -117,7 +117,7 @@ $('body').on('click','.handleAddToWatchlist',handleAddToWatchlist);
 async function handleAddToWatchlist() {
   let imdbId = $(this).attr('data-imdbId') // get movie ID to search IMDB db (via unique URL)
   let userId = sessionStorage.getItem('movieMasterId');
-  console.log('userId',userId);
+  // console.log('userId',userId);
   if (userId !== null) {
     addMovieToDb(imdbId,userId);
     $(this).replaceWith(`<p style='color:green'>Added to Watchlist</p>`);
