@@ -1,21 +1,23 @@
-console.log('Lieutenant, we are connected and ready to rumble.');
+// All logic for the Search page.
+// Scrape button, search input, load watchlist + user rating.
 
 
-const omdbApiKey = config.OMDB_API_KEY;
-// const omdbApiKey = process.env.OMDB_API_KEY;
-
+const omdbApiKey = config.OMDB_API_KEY; // for OMDB access
 
 // ------------------------------------------------------------------
 //              Scrape
 // ------------------------------------------------------------------
 
-// Dropdown clicked
-$('body').on('click','.scrapeImdb', () => {
-  let pageStart = $(this).attr('data-pageStart'); // grab page
-  $('#scrapeDisplay').html('<h4>Loading movies (takes a few seconds)...</h4>'); // loading message
-  scrapeImdb(pageStart);
-});
+$('body').on('click', '.scrapeImdb', scrapeDropdownClicked);
 
+// Grab page # and scrape IMDB.
+function scrapeDropdownClicked() {
+  let pageStart = $(this).attr('data-pageStart'); // grab page
+  $('#scrapeDisplay').html('<h4>Scraping movies...</h4>'); // loading message
+  scrapeImdb(pageStart);
+}
+
+// Scrape, then display results.
 function scrapeImdb(page) {
   let queryObj = {
     pageStart: page
@@ -30,17 +32,22 @@ function scrapeImdb(page) {
     },
     success: data => {
       let imdbArray = data;
-      displayMovies(imdbArray,'scrapeDisplay')
+      displayMovies(imdbArray, 'scrapeDisplay');
     }
   })
 }
 
-async function displayMovies(array,element) {
-  let $movieDiv = $('<div>');
-  for (let n=0; n < array.length; n++) {
-    // console.log('array[n]',array[n])
-    let movie = await pullMovieFromOmdb(array[n],'id');
-    let watchlistButton = await loadAddToWatchlistButton(movie.Title,movie.imdbID);
+// Loop through each array element and display movie info (rolling basis)
+function displayMovies(array, element) {
+  $(`#${element}`).empty();
+
+  for (item of array) {
+    printMovieToPage(item);
+  }
+
+  async function printMovieToPage(arrayId) {
+    let movie = await pullMovieFromOmdb(arrayId,'id');
+    let watchlistButton = await loadAddToWatchlistButton(movie.Title, movie.imdbID);
     let $movie = $('<div>');
     $movie.html(`
       <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
@@ -63,16 +70,14 @@ async function displayMovies(array,element) {
         </div>
       </div>
     `)
-    $movieDiv.append($movie);
+    $(`#${element}`).append($movie);
   }
-
-  $(`#${element}`).empty().append($movieDiv); // clear loading message then add movies
 }
 
-async function loadAddToWatchlistButton(title,imdbID) {
+// Load text or button based on if it's already been added
+async function loadAddToWatchlistButton(title, imdbID) {
   let userId = sessionStorage.getItem('movieMasterId');
-  let duplicateBoolean = await checkIfDuplicate(userId,title);
-  // console.log('duplicateBoolean',duplicateBoolean)
+  let duplicateBoolean = await checkIfExists(userId, title);
   if (!duplicateBoolean) {
     return `<button class='btn btn-info btn-sm mt-2 mb-2 handleAddToWatchlist' data-imdbId='${imdbID}' data-title='${title}'><i class="fas fa-plus-circle"></i> Add to Watchlist</button>`
   } else {
@@ -80,12 +85,12 @@ async function loadAddToWatchlistButton(title,imdbID) {
   }
 }
 
-function checkIfDuplicate(userId,title) {
+function checkIfExists(userId, title) {
   let queryObj = {
     UserId: userId,
     title: title
   }
-  return $.get('/api/check-duplicate',queryObj)
+  return $.get('/api/check-if-exists', queryObj)
     .then( data => {
       // if data is true, then it's a duplicate entry
       return data
@@ -93,7 +98,7 @@ function checkIfDuplicate(userId,title) {
     .catch( err => console.log(err))
 }
 
-function pullMovieFromOmdb(searchValue,type) {
+function pullMovieFromOmdb(searchValue, type) {
   let searchType = null;
   if (type === 'id') {
     searchType = 'i';
@@ -111,23 +116,23 @@ function pullMovieFromOmdb(searchValue,type) {
 //              Add to watchlist
 // ------------------------------------------------------------------
 
-// Add to watchlist button handler
-$('body').on('click','.handleAddToWatchlist',handleAddToWatchlist);
+// 'Add to Watchlist' button handler
+$('body').on('click', '.handleAddToWatchlist', handleAddToWatchlist);
 
-async function handleAddToWatchlist() {
+// If user is signed in, add movie to watchlist. If not, notify user.
+function handleAddToWatchlist() {
   let imdbId = $(this).attr('data-imdbId') // get movie ID to search IMDB db (via unique URL)
-  let userId = sessionStorage.getItem('movieMasterId');
-  // console.log('userId',userId);
+  let userId = sessionStorage.getItem('movieMasterId'); // check if user is signed in
   if (userId !== null) {
-    addMovieToDb(imdbId,userId);
+    addMovieToDb(imdbId, userId);
     $(this).replaceWith(`<p style='color:green'>Added to Watchlist</p>`);
   } else {
     $(this).replaceWith(`<p style='color:red'>Need to create an account</p>`);
   }
 }
 
-async function addMovieToDb(imdbId,userId) {
-  let omdbMovie = await pullMovieFromOmdb(imdbId,'id');
+async function addMovieToDb(imdbId, userId) {
+  let omdbMovie = await pullMovieFromOmdb(imdbId, 'id');
   let runtimeUpdated = omdbMovie.Runtime.replace(/\D+/g, '');
   let movie = {
     UserId: Number(userId),
@@ -145,35 +150,28 @@ async function addMovieToDb(imdbId,userId) {
 
     isWatched: false
   }
-  $.post('/api/add-movie-to-watchlist',movie)
-    .then( () => {
-      // console.log('posted!');
-    })
-    .catch( err => console.log(err))
+  $.post('/api/add-movie-to-watchlist', movie)
+    .catch( err => console.log(err));
 }
 
 // ------------------------------------------------------------------
 //              Search
 // ------------------------------------------------------------------
 
-$('body').on('click','#searchInputSubmit',submitSearch);
+$('body').on('click', '#searchInputSubmit', submitSearch);
 
-
+// Get array of movies (max 10) based on search input.
+// Pass array of imdbIds into displayMovies func.
+// Use array of IDs to get full movie objects.
 async function submitSearch() {
   event.preventDefault();
-
-  // first get array of movies and grab the imdbId
   let searchTerm = $('#searchInput').val().trim();
-  let omdbMovieArray = await pullMovieFromOmdb(searchTerm,'title'); // search results don't give the full object
-  // console.log('omdbMovieArray.Search',omdbMovieArray.Search)
-  let splicedArray = (omdbMovieArray.Search.length > 10) ? omdbMovieArray.Search.splice(0,10) : omdbMovieArray.Search; // limit the search results to 10
+  let omdbMovieArray = await pullMovieFromOmdb(searchTerm, 'title'); // search results don't give the full object
+  let splicedOmdbMovieArray = (omdbMovieArray.Search.length > 10) ? omdbMovieArray.Search.splice(0, 10) : omdbMovieArray.Search; // limit the search results to 10
+  let imdbIdArray = splicedOmdbMovieArray.map( movie => {
+    return movie.imdbID
+  })
   
-  let imdbIdArray = [];
-  for (let n=0; n < splicedArray.length; n++) {
-    imdbIdArray.push(splicedArray[n].imdbID);
-  }
-  
-  // then use the array of imdbIds to get an array of Movies with full props
-  $('#searchDisplay').html('<h4>Loading movies (takes a second)...</h4>'); // loading message
-  displayMovies(imdbIdArray,'searchDisplay');
+  $('#searchDisplay').html('<h4>Loading search results...</h4>');
+  displayMovies(imdbIdArray, 'searchDisplay');
 }

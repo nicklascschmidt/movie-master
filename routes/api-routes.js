@@ -1,4 +1,6 @@
-var db = require('../models');
+// Routes for interacting with the DB.
+
+const db = require('../models');
 
 module.exports = function(app) {
 
@@ -8,13 +10,15 @@ module.exports = function(app) {
     db.User.create({
       username: req.body.username,
       password: req.body.password
-    }).then(function() {
-      res.end();
-    }).catch(err => {
-      console.log(err);
-      res.sendStatus(500);
     })
-
+      .then( () => {
+        res.end();
+      })
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+      }
+    )
   });
 
   // Check login credentials
@@ -22,26 +26,31 @@ module.exports = function(app) {
     // console.log('req.query',req.query);
     db.User.findOne({
       where: req.query
-    }).then(data => {
-      res.json(data);
-    }).catch(err => {
-      console.log(err);
-      res.sendStatus(500);
     })
+      .then(data => {
+        res.json(data);
+      })
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+      }
+    )
   });
 
   // Add a movie to to-do list
   app.post('/api/add-movie-to-watchlist', function(req,res) {
     // console.log('req.body',req.body);
-
     db.Movie.create(
       req.body
-    ).then( () => {
-      res.end();
-    }).catch(err => {
-      console.log(err);
-      res.sendStatus(500);
-    })
+    )
+      .then( () => {
+        res.end();
+      })
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+      }
+    )
   })
 
   // Get all movies
@@ -52,10 +61,12 @@ module.exports = function(app) {
     })
       .then( data => {
         res.json(data);
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log(err);
         res.sendStatus(500);
-      })
+      }
+    )
   })
   
   // Get one movie
@@ -70,10 +81,12 @@ module.exports = function(app) {
     })
       .then( () => {
         res.end();
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log(err);
         res.sendStatus(500);
-      })
+      }
+    )
   })
 
   // Change the user rating
@@ -113,7 +126,7 @@ module.exports = function(app) {
       .catch( err => console.log('err',err))
   })
 
-  app.get('/api/check-duplicate', function(req,res) {
+  app.get('/api/check-if-exists', function(req,res) {
     // console.log('req.query',req.query);
     let title = req.query.title;
     let userId = req.query.UserId;
@@ -129,10 +142,12 @@ module.exports = function(app) {
         } else {
           res.send(false);
         }
-      }).catch(err => {
+      })
+      .catch(err => {
         console.log(err);
         res.end();
-      })
+      }
+    )
   })
 
   // Delete from DB

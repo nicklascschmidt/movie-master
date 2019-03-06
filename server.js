@@ -1,3 +1,6 @@
+// Entry point of the application.
+// Set up server, import routes, sync DB.
+
 require('dotenv').config();
 
 const express = require("express");
@@ -12,7 +15,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Make public a static folder
+// Make client a static folder
 app.use(express.static(path.join(__dirname, 'client')))
 
 require("./routes/html-routes")(app);
