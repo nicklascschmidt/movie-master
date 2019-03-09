@@ -63,9 +63,8 @@ function removeFromList() {
     url: '/api/remove-movie-from-db',
     method: 'DELETE',
     data: queryObj,
-    timeout: 1000 * 3,
     error: function(jqXHR, textStatus, errorThrown) {
-      console.log('ajax error',textStatus, errorThrown);
+      console.log('ajax error', textStatus, errorThrown);
     }
   })
   handleMoviesOnLoad();
@@ -93,10 +92,9 @@ function markAsWatched() {
     url: '/api/update-isWatched',
     method: 'PUT',
     data: queryObj,
-    timeout: 1000 * 5,
-    // error: function(jqXHR, textStatus, errorThrown) {
-    //   console.log('ajax error',textStatus, errorThrown);
-    // }
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('ajax error',textStatus, errorThrown);
+    }
   })
   .catch( err => err)
   handleMoviesOnLoad();

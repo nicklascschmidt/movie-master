@@ -16,9 +16,7 @@
     <nav class='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
       <a class='navbar-brand' href='/'>Movie Master</a>
       <ul class='navbar-nav ml-auto'>
-        <li class='nav-item'>
-          <a href='/' class='btn btn-info nav-button'>Login / Signup</a>
-        </li>
+        <li id='navLogin' class='nav-item'></li>
         <li class='nav-item'>
           <a href='/my-movies.html' class='btn btn-info nav-button'>My Movies</a>
         </li>
@@ -45,11 +43,11 @@
             <form>
               <div class="form-group">
                 <label for="loginUsernameInput">Username</label>
-                <input type="text" class="form-control" id="loginUsernameInput" placeholder="Username">
+                <input type="text" class="form-control" id="loginUsernameInput" placeholder="johnny123">
               </div>
               <div class="form-group">
                 <label for="loginPasswordInput">Password</label>
-                <input type="password" class="form-control" id="loginPasswordInput" placeholder="Password">
+                <input type="password" class="form-control" id="loginPasswordInput" placeholder="ilovemovies456">
               </div>
               <button type="submit" id='submitLogin' class="btn btn-primary">Submit</button>
             </form>
@@ -66,11 +64,11 @@
               <form id='signupForm'>
                 <div class="form-group">
                   <label for="signupUsernameInput">Username</label>
-                  <input type="text" class="form-control" id="signupUsernameInput" placeholder="Username">
+                  <input type="text" class="form-control" id="signupUsernameInput" placeholder="johnny123">
                 </div>
                 <div class="form-group">
                   <label for="signupPasswordInput">Password</label>
-                  <input type="password" class="form-control" id="signupPasswordInput" placeholder="Password">
+                  <input type="password" class="form-control" id="signupPasswordInput" placeholder="ilovemovies456">
                 </div>
                 <button type="submit" id='submitSignup' class="btn btn-primary">Submit</button>
               </form>
@@ -87,5 +85,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-  <script src='/js/index.js'></script>
+  <script type='text/javascript' src='/js/index.js'></script>
+  <script type='text/javascript' src='/js/nav.js'></script>
 </body>
