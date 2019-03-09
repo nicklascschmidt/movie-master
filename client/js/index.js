@@ -1,17 +1,10 @@
+// Index handles login/signup, frontend validation, rerouting to My Movies page
 
+// type = signup || login
 function captureUserInputs(type) {
   let user = {
-    username: null,
-    password: null
-  }
-  if (type === 'signup') {
-    user.username = $('#signupUsernameInput').val();
-    user.password = $('#signupPasswordInput').val();
-  } else if (type === 'login') {
-    user.username = $('#loginUsernameInput').val();
-    user.password = $('#loginPasswordInput').val();
-  } else {
-    // nothing
+    username: $(`#${type}UsernameInput`).val(),
+    password: $(`#${type}PasswordInput`).val()
   }
   return user
 }
@@ -19,6 +12,8 @@ function captureUserInputs(type) {
 // --------- Signup ---------
 $('#submitSignup').on('click',handleSignup);
 
+// Grabs and validates signup inputs
+// If success, send user info to DB. If not, show frontend validation errors.
 function handleSignup() {
   event.preventDefault();
 
@@ -37,6 +32,9 @@ function handleSignup() {
   }
 }
 
+// Validation (simple), return object with errors and boolean
+// Username: between 3-30 chars, no spaces
+// Password: between 5-30 chars, no spaces
 function validateSignup(user) {
   let errorObj = {
     errors: [],
@@ -48,8 +46,7 @@ function validateSignup(user) {
     errorObj.errors.push('Username must be between 3-30 characters.');
     errorObj.isError = true;
   }
-  let usernameSpaceIsFound = findSpaces(user.username);
-  if (usernameSpaceIsFound) {
+  if (user.username.includes(' ')) {
     errorObj.errors.push('Username cannot contain spaces.');
     errorObj.isError = true;
   }
@@ -59,21 +56,12 @@ function validateSignup(user) {
     errorObj.errors.push('Password must be between 5-30 characters.');
     errorObj.isError = true;
   }
-  let passwordSpaceIsFound = findSpaces(user.password);
-  if (passwordSpaceIsFound) {
+  if (user.password.includes(' ')) {
     errorObj.errors.push('Password cannot contain spaces.');
     errorObj.isError = true;
   }
   
-  return errorObj
-}
-
-function findSpaces(word) {
-  for (let n=0; n < word.length; n++) {
-    if (word[n] === ' ') {
-      return true
-    }
-  }
+  return errorObj;
 }
 
 function clearSignupForm() {
@@ -94,6 +82,8 @@ function submitSignupToDb(user) {
 // --------- Login ---------
 $('#submitLogin').on('click',validateLogin);
 
+// Grabs and validates login inputs
+// If success, run welcomeUser (say welcome and redirect). If not, show login error.
 async function validateLogin() {
   event.preventDefault();
 
@@ -114,20 +104,22 @@ function checkDbForLoginCredentials(user) {
     .catch(err => console.log('err',err));
 }
 
+// Show welcome message and initiate countdown (to redirect)
+// Save user's ID in session storage - makes it accessible throughout the application
 function welcomeUser(user) {
-  let countdownNum = 5;
-  sessionStorage.setItem('movieMasterId',user.id); // stores user's ID in session storage - accessible on other pages
-  $('#userForms').html(`<div class="container-fluid text-center"><h2>Welcome ${user.username}!</h2><h4 id='countdownRedirect' data-countdown='5'>Taking you to the My Movies page in ${countdownNum}</h4></div>`);
+  sessionStorage.setItem('movieMasterId',user.id);
   
+  let countdownNum = 5;
+  $('#userForms').html(`<div class="container-fluid text-center"><h2>Welcome ${user.username}!</h2><h4 id='countdownRedirect'>Taking you to the Movie Search page in ${countdownNum}</h4></div>`);
   setInterval(countdownRedirect,1000);
   
+  // Decrement countdown #. Redirect when countdown is over.
   function countdownRedirect() {
     countdownNum--;
-    
     if (countdownNum === 0) {
-      window.location = '/my-movies.html'; // bring user to the my movies page
+      window.location = '/search.html'; // bring user to the search page
     } else {
-      $('#countdownRedirect').text(`Taking you to the My Movies page in ${countdownNum}`);
+      $('#countdownRedirect').text(`Taking you to the Movie Search page in ${countdownNum}`);
     }
   }
 }

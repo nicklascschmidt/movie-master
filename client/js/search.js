@@ -22,18 +22,8 @@ function scrapeImdb(page) {
   let queryObj = {
     pageStart: page
   }
-  $.ajax({
-    url: '/scrape/imdb',
-    method: 'GET',
-    data: queryObj,
-    timeout: 1000 * 3,
-    error: (jqXHR, textStatus, errorThrown) => {
-      console.log('ajax error',textStatus, errorThrown);
-    },
-    success: data => {
-      let imdbArray = data;
-      displayMovies(imdbArray, 'scrapeDisplay');
-    }
+  $.getJSON('/scrape/imdb', queryObj, data => {
+    displayMovies(data, 'scrapeDisplay');
   })
 }
 
@@ -74,7 +64,7 @@ function displayMovies(array, element) {
   }
 }
 
-// Load text or button based on if it's already been added
+// Load text or button based on if the movie exists on watchlist already
 async function loadAddToWatchlistButton(title, imdbID) {
   let userId = sessionStorage.getItem('movieMasterId');
   let duplicateBoolean = await checkIfExists(userId, title);
@@ -85,31 +75,19 @@ async function loadAddToWatchlistButton(title, imdbID) {
   }
 }
 
+// Check if the movie is on the watchlist. If Ajax response is true, then it's a duplicate.
 function checkIfExists(userId, title) {
   let queryObj = {
     UserId: userId,
     title: title
   }
-  return $.get('/api/check-if-exists', queryObj)
-    .then( data => {
-      // if data is true, then it's a duplicate entry
-      return data
-    })
-    .catch( err => console.log(err))
+  return $.getJSON('/api/check-if-exists', queryObj);
 }
 
+// Type = 'id' or 'title'
 function pullMovieFromOmdb(searchValue, type) {
-  let searchType = null;
-  if (type === 'id') {
-    searchType = 'i';
-  } else if (type === 'title') {
-    searchType = 's'
-  } else {
-    // nothing
-  }
-  return $.get(`https://www.omdbapi.com/?apikey=${omdbApiKey}&${searchType}=${searchValue}`)
-    .then(response => response)
-    .catch(err => console.log('err',err));
+  let searchType = (type === 'id') ? 'i' : 's';
+  return $.getJSON(`https://www.omdbapi.com/?apikey=${omdbApiKey}&${searchType}=${searchValue}`)
 }
 
 // ------------------------------------------------------------------
