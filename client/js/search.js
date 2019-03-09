@@ -109,9 +109,10 @@ function handleAddToWatchlist() {
   }
 }
 
+// Pull movie from OMDB, create movie object, submit to DB
 async function addMovieToDb(imdbId, userId) {
   let omdbMovie = await pullMovieFromOmdb(imdbId, 'id');
-  let runtimeUpdated = omdbMovie.Runtime.replace(/\D+/g, '');
+  let runtimeUpdated = omdbMovie.Runtime.replace(/\D+/g, ''); // removes all non digits - in this case " min"
   let movie = {
     UserId: Number(userId),
     title: omdbMovie.Title,
@@ -138,9 +139,9 @@ async function addMovieToDb(imdbId, userId) {
 
 $('body').on('click', '#searchInputSubmit', submitSearch);
 
-// Get array of movies (max 10) based on search input.
-// Pass array of imdbIds into displayMovies func.
-// Use array of IDs to get full movie objects.
+// Get array of movies (max 10) based on search input
+// Pass array of imdbIds into displayMovies func
+// Use array of IDs to get full movie objects
 async function submitSearch() {
   event.preventDefault();
   let searchTerm = $('#searchInput').val().trim();

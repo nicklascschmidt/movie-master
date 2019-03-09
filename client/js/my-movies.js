@@ -1,10 +1,8 @@
-console.log('Lieutenant, we are connected and ready to rumble.');
-
 $(document).ready(handleMoviesOnLoad());
 
 
 async function handleMoviesOnLoad() {
-  let userId = sessionStorage.getItem('movieMasterId')
+  let userId = sessionStorage.getItem('movieMasterId');
   let unwatchedMovies = await pullMoviesFromDb('unwatched');
   let watchedMovies = await pullMoviesFromDb('watched');
   if (userId) {
