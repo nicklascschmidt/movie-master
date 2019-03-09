@@ -6,74 +6,77 @@
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
 
-  <!-- Bootstrap (bootswatch Materia theme), Icons -->
+  <!-- Bootstrap (bootswatch Materia theme), Icons, local CSS -->
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/materia/bootstrap.min.css'/>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-  
   <link rel='stylesheet' type='text/css' href='/style.css'>
 </head>
 
 <body>
-  <nav class='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
-    <a class='navbar-brand' href='/'>Movie Master</a>
-    <ul class='navbar-nav ml-auto'>
-      <li class='nav-item'>
-        <a href='/' class='btn btn-info nav-button'>Login / Signup</a>
-      </li>
-      <li class='nav-item'>
-        <a href='/my-movies.html' class='btn btn-info nav-button'>My Movies</a>
-      </li>
-      <li class='nav-item'>
-        <a href='/search.html' class='btn btn-info nav-button'>Movie Search</a>
-      </li>
-    </ul>
-  </nav>
-
-  <div class='jumbotron text-center background-image'>
-    <h1>Movie Search</h1>
-    <h4>Search for movies with the tools provided below</h4>
-  </div>
-
-  <div id='movie-container' class='container-fluid row'>
-    <div class='col-6'>
-      <div class='card'>
-        <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
-          <h3>Scrape IMDB Top 250</h3>
-          <div class="dropdown">
-            <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Scrape
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='1'>Page 1 (1-50)</p>
-              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='51'>Page 2 (51-100)</p>
-              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='101'>Page 3 (101-150)</p>
-              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='151'>Page 4 (151-200)</p>
-              <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='201'>Page 5 (201-250)</p>
+  <header>
+    <nav class='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
+      <a class='navbar-brand' href='/'>Movie Master</a>
+      <ul class='navbar-nav ml-auto'>
+        <li class='nav-item'>
+          <a href='/' class='btn btn-info nav-button'>Login / Signup</a>
+        </li>
+        <li class='nav-item'>
+          <a href='/my-movies.html' class='btn btn-info nav-button'>My Movies</a>
+        </li>
+        <li class='nav-item'>
+          <a href='/search.html' class='btn btn-info nav-button'>Movie Search</a>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class='jumbotron text-center background-image'>
+      <h1>Movie Search</h1>
+      <h4>Search for movies with the tools provided below</h4>
+    </div>
+  </header>
+    
+  <section>
+    <div id='movie-container' class='container-fluid row'>
+      <div class='col-6'>
+        <div class='card'>
+          <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+            <h3>Scrape IMDB Top 250</h3>
+            <div class="dropdown">
+              <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Scrape
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='1'>Page 1 (1-50)</p>
+                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='51'>Page 2 (51-100)</p>
+                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='101'>Page 3 (101-150)</p>
+                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='151'>Page 4 (151-200)</p>
+                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='201'>Page 5 (201-250)</p>
+              </div>
             </div>
           </div>
+          <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
+            <div id='scrapeDisplay'></div>
+          </div>
         </div>
-        <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
-          <div id='scrapeDisplay'></div>
+      </div>
+      <div class='col-6'>
+        <div class='card'>
+          <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+            <h3>Search</h3>
+            <form class='form-inline'>
+              <input type='text' class='form-control form-control-sm' placeholder='search...' id='searchInput' style='color:white'>
+              <button type='submit' class='btn btn-info btn-sm ml-3' id='searchInputSubmit'>Search</button>
+            </form>
+          </div>
+          <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
+            <div id='searchDisplay'></div>
+          </div>
         </div>
       </div>
     </div>
-    <div class='col-6'>
-      <div class='card'>
-        <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
-          <h3>Search</h3>
-          <form class='form-inline'>
-            <input type='text' class='form-control form-control-sm' placeholder='search...' id='searchInput' style='color:white'>
-            <button type='submit' class='btn btn-info btn-sm ml-3' id='searchInputSubmit'>Search</button>
-          </form>
-        </div>
-        <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
-          <div id='searchDisplay'></div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </section>
   
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS, then local JS -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>

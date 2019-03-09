@@ -5,78 +5,84 @@
   <title>Movie Master</title>
   <meta charset='UTF-8'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+  <!-- Bootstrap (bootswatch Materia theme), Icons, local CSS -->
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/materia/bootstrap.min.css'/>
   <link rel='stylesheet' type='text/css' href='/style.css'>
 </head>
 
 <body>
-  <nav class='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
-    <a class='navbar-brand' href='/'>Movie Master</a>
-    <ul class='navbar-nav ml-auto'>
-      <li class='nav-item'>
-        <a href='/' class='btn btn-info nav-button'>Login / Signup</a>
-      </li>
-      <li class='nav-item'>
-        <a href='/my-movies.html' class='btn btn-info nav-button'>My Movies</a>
-      </li>
-      <li class='nav-item'>
-        <a href='/search.html' class='btn btn-info nav-button'>Movie Search</a>
-      </li>
-    </ul>
-  </nav>
+  <header>
+    <nav class='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
+      <a class='navbar-brand' href='/'>Movie Master</a>
+      <ul class='navbar-nav ml-auto'>
+        <li class='nav-item'>
+          <a href='/' class='btn btn-info nav-button'>Login / Signup</a>
+        </li>
+        <li class='nav-item'>
+          <a href='/my-movies.html' class='btn btn-info nav-button'>My Movies</a>
+        </li>
+        <li class='nav-item'>
+          <a href='/search.html' class='btn btn-info nav-button'>Movie Search</a>
+        </li>
+      </ul>
+    </nav>
 
-  <div class='jumbotron text-center background-image'>
-    <h1>Login / Signup</h1>
-    <h4>Log into an account or create one to track your movie watchlist</h4>
-  </div>
-
-  <div id='userForms' class='container-fluid row'>
-    <div class='col-6 col-xs-12'>
-      <div class='card'>
-        <div class='card-header'>
-          <h3>Login</h3>
-        </div>
-        <div class='card-body'>
-          <form>
-            <div class="form-group">
-              <label for="loginUsernameInput">Username</label>
-              <input type="text" class="form-control" id="loginUsernameInput" placeholder="Username">
-            </div>
-            <div class="form-group">
-              <label for="loginPasswordInput">Password</label>
-              <input type="password" class="form-control" id="loginPasswordInput" placeholder="Password">
-            </div>
-            <button type="submit" id='submitLogin' class="btn btn-primary">Submit</button>
-          </form>
-          <div id='loginInputError'></div>
-        </div>
-      </div>
+    <div class='jumbotron text-center background-image'>
+      <h1>Login / Signup</h1>
+      <h4>Log into an account or create one to track your movie watchlist</h4>
     </div>
-    <div class='col-6 col-xs-12'>
-      <div class='card'>
-        <div class='card-header'>
-          <h3>Signup</h3>
-        </div>
-        <div class='card-body'>
-            <form id='signupForm'>
+  </header>
+
+  <section>
+    <div id='userForms' class='container-fluid row'>
+      <div class='col-6 col-xs-12'>
+        <div class='card'>
+          <div class='card-header'>
+            <h3>Login</h3>
+          </div>
+          <div class='card-body'>
+            <form>
               <div class="form-group">
-                <label for="signupUsernameInput">Username</label>
-                <input type="text" class="form-control" id="signupUsernameInput" placeholder="Username">
+                <label for="loginUsernameInput">Username</label>
+                <input type="text" class="form-control" id="loginUsernameInput" placeholder="Username">
               </div>
               <div class="form-group">
-                <label for="signupPasswordInput">Password</label>
-                <input type="password" class="form-control" id="signupPasswordInput" placeholder="Password">
+                <label for="loginPasswordInput">Password</label>
+                <input type="password" class="form-control" id="loginPasswordInput" placeholder="Password">
               </div>
-              <button type="submit" id='submitSignup' class="btn btn-primary">Submit</button>
+              <button type="submit" id='submitLogin' class="btn btn-primary">Submit</button>
             </form>
-          <div id='signupInputError'></div>
+            <div id='loginInputError'></div>
+          </div>
+        </div>
+      </div>
+      <div class='col-6 col-xs-12'>
+        <div class='card'>
+          <div class='card-header'>
+            <h3>Signup</h3>
+          </div>
+          <div class='card-body'>
+              <form id='signupForm'>
+                <div class="form-group">
+                  <label for="signupUsernameInput">Username</label>
+                  <input type="text" class="form-control" id="signupUsernameInput" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <label for="signupPasswordInput">Password</label>
+                  <input type="password" class="form-control" id="signupPasswordInput" placeholder="Password">
+                </div>
+                <button type="submit" id='submitSignup' class="btn btn-primary">Submit</button>
+              </form>
+            <div id='signupInputError'></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
   
 
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS, then local JS -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
