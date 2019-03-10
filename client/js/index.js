@@ -1,6 +1,5 @@
 // Login/signup page, frontend validation, rerouting to My Movies page
 
-
 // On doc load--
 // if user is already logged in, hide signup/login form.
 // If not, hide the "already signed in" message.
