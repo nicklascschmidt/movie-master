@@ -1,5 +1,5 @@
-// Loads movies from user's watchlist (watched + unwatched)
-// Sets logic to handle changes to user movie rating, watch/unwatched, remove from watchlist
+// Loads movies from user's watchlist (watched + unwatched).
+// Sets logic to handle changes to user movie rating, watch/unwatched, remove from watchlist.
 
 $(document).ready(handleMoviesOnLoad());
 
@@ -16,8 +16,19 @@ async function handleMoviesOnLoad() {
   }
 }
 
-// Build div for each movie, append to HTML div
-// If no movies on watchlist, show message
+// Pull movies for a certain type (watched/unwatched), return an array of movie objects.
+function pullMoviesFromDb(type,userId) {
+  let queryObj = {
+    UserId: userId,
+    isWatched: (type === 'watched') ? 1 : 0
+  }
+  return $.get('/api/movies',queryObj)
+    .then(data => data)
+    .catch(err => console.log(err));
+}
+
+// Build div for each movie, append to HTML.
+// If no movies on watchlist, show message.
 function displayMovies(array,type) {
   $(`#${type}-movies`).empty();
   if (array.length > 0) {
@@ -62,15 +73,11 @@ $('body').on('click','.removeFromList',removeFromList);
 
 async function removeFromList() {
   let id = $(this).attr('data-id');
-  let queryObj = { id };
   $.ajax({
-    url: '/api/remove-movie-from-db',
-    method: 'POST',
-    data: queryObj,
-    success: function(resp) {
-      if (resp) {
-        handleMoviesOnLoad();
-      }
+    url: `/api/movies/delete/${id}`,
+    method: 'DELETE',
+    success: data => {
+      (data === 1) ? handleMoviesOnLoad() : null;
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log('ajax error', textStatus, errorThrown);
@@ -78,7 +85,7 @@ async function removeFromList() {
   });
 }
 
-// When movies are loaded, shows diff message for each movie
+// When movies are loaded, shows diff message for each movie.
 function watchedOrUnwatched(isWatched) {
   if (isWatched) {
     return `<i class="fas fa-eye-slash"></i> Mark as unwatched`
@@ -87,7 +94,7 @@ function watchedOrUnwatched(isWatched) {
   }
 }
 
-// When mark as watched button is clicked, update the DB and reload the movies
+// When mark as watched button is clicked, update the DB and reload the movies.
 $('body').on('click','.markAsWatched',markAsWatched);
 
 function markAsWatched() {
@@ -111,7 +118,7 @@ function markAsWatched() {
   .catch( err => err);
 }
 
-// reformats the user rating to a # with one decimal
+// Reformat the user rating to a # with one decimal.
 function getUserRating(rating,id) {
   let ratingFormatted = parseFloat(rating).toFixed(1);
   if (rating !== null) {
@@ -121,7 +128,7 @@ function getUserRating(rating,id) {
   }
 }
 
-// When "Rate" button is clicked, replace the button with a form
+// When "Rate" button is clicked, replace the button with a form.
 $('body').on('click','.switchToUserRatingForm',switchToUserRatingForm);
 
 function switchToUserRatingForm() {
@@ -158,7 +165,7 @@ function submitUserRating() {
   }
 }
 
-// User rating validation (simple) - must be a # between 0 and 10
+// User rating validation (simple) - must be a # between 0 and 10.
 function validateUserRating(rating) {
   let errorObj = {
     isError: null,
@@ -184,15 +191,4 @@ function submitUserRatingToDb(rating,id) {
     }
   })
   .catch( err => console.log('err',err))
-}
-
-// Pulls movies for a certain type (watched/unwatched), returns an array of movie objects
-function pullMoviesFromDb(type,userId) {
-  let queryObj = {
-    isWatched: (type === 'watched') ? 1 : 0,
-    UserId: userId
-  }
-  return $.get('/api/get-all-movies',queryObj)
-    .then( response => response)
-    .catch( err => console.log('err',err))
 }

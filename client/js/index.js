@@ -83,12 +83,13 @@ function clearSignupForm() {
   $('#signupInputError').text('');
 }
 
-// TODO: replaces /api/new-user
+// Adds user to DB
 function submitSignupToDb(user) {
   $.post('/api/users/signup',user)
     .then( data => {
       $('#signupForm').html(`<div class="text-center"><h4>User "${data.username}" submitted! Please login now.</h4></div>`);
-    });
+    })
+    .catch(err => console.log(err));
 }
  
 
@@ -109,9 +110,11 @@ async function validateLogin() {
   }
 }
 
-// TODO: replaces /api/find-user
+// Check DB for user login credentials
 function checkDbForLoginCredentials(user) {
-  return $.get('/api/users/login', user).then(response => response);
+  return $.get('/api/users/login', user)
+    .then(response => response)
+    .catch(err => console.log(err));
 }
 
 // Show welcome message and initiate countdown (to redirect)
@@ -119,7 +122,7 @@ function checkDbForLoginCredentials(user) {
 function welcomeUser(user) {
   sessionStorage.setItem('movieMasterId',user.id);
   
-  let countdownNum = 5;
+  let countdownNum = 3;
   $('#userForms').html(`<div class="container-fluid text-center"><h2>Welcome ${user.username}!</h2><h4 id='countdownRedirect'>Taking you to the Movie Search page in ${countdownNum}</h4></div>`);
   setInterval(countdownRedirect,1000);
   

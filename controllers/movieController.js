@@ -2,15 +2,42 @@ const db = require("../models");
 
 // Defining methods for the articleController
 module.exports = {
+  // Find movies (watched || unwatched), sort by most recently updated.
   findAll: function(req, res) {
-    console.log('\n\n\nreq.query',req.query,'\n\n\n')
     db.Movie
-      .find(req.query)
-      // .sort({ date: -1 })
-      // .then(dbMovie => res.json(dbMovie))
-      .then(dbMovie => res.json(dbMovie))
+      .findAll({ where: req.query, order: [['updatedAt','DESC']] })
+      .then(dbMovies => res.json(dbMovies))
       .catch(err => res.status(422).json(err));
   },
+
+  remove: function(req, res) {
+    console.log('\n\nreq.params',req.params,'\n\n')
+    db.Movie
+      .destroy({ where: req.params })
+      .then(deletedResp => res.json(deletedResp))
+      .catch(err => res.status(422).json(err));
+  },
+
+
+
+  // Add user
+  VOIDcreate: function(req,res) {
+    db.User
+      .create(req.body)
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err));
+  },
+  // Check user login credentials
+  VOIDfindOne: function(req,res) {
+    db.User
+      .findOne({ where: req.query })
+      .then(dbUser => res.json(dbUser))
+      .catch(err => res.status(422).json(err));
+  }
+
+
+
+
   // findById: function(req, res) {
   //   db.Movie
   //     .findById(req.params.id)
