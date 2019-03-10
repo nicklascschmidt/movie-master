@@ -1,6 +1,5 @@
 // Loads movies from user's watchlist (watched + unwatched)
 // Sets logic to handle changes to user movie rating, watch/unwatched, remove from watchlist
-// TODO: comment this doc!!
 
 $(document).ready(handleMoviesOnLoad());
 

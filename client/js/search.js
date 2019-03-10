@@ -40,14 +40,14 @@ function displayMovies(array, element) {
     let watchlistButton = await loadAddToWatchlistButton(movie.Title, movie.imdbID);
     let $movie = $('<div>');
     $movie.html(`
-      <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
+      <div class='row movie-custom'>
         <div class='col-3 text-center'>
           <img src=${movie.Poster} width='100%' style='margin:10px 0'>
         </div>
         <div class='col-9'>
           <div class='row'>
             <div class='col-7'>
-              <h4 style="display:inline-block"><a href=https://www.imdb.com/title/${movie.imdbID}/ target='_blank'><strong>${movie.Title}</strong></a></h4> <h5 style="display:inline-block">(${movie.Year})</h5>
+              <h4 class='d-inline-block'><a href=https://www.imdb.com/title/${movie.imdbID}/ target='_blank'><strong>${movie.Title}</strong></a></h4> <h5 class='d-inline-block'>(${movie.Year})</h5>
               <p>${movie.Rated} | ${movie.Runtime} | ${movie.Genre}</p>
             </div>
             <div class='col-5 text-right'>

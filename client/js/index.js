@@ -2,6 +2,12 @@
 
 // TODO: need to update display so that if user is logged in, display message "You're already logged in. To log into a different account, please log out first (top left)."
 
+$(document).ready(handleOnLoad());
+
+function handleOnLoad() { 
+  $('#userForms').show();
+}
+
 // type = signup || login
 function captureUserInputs(type) {
   let user = {
