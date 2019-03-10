@@ -33,14 +33,12 @@ function handleSignup() {
   event.preventDefault();
 
   let user = captureUserInputs('signup');
-
   let errorResult = validateSignup(user);
-  
-  $('#signupInputError').text('');
   if (!errorResult.isError) {
     clearSignupForm();
     submitSignupToDb(user);
   } else {
+    $('#signupInputError').text('');
     for (let n=0; n < errorResult.errors.length; n++) {
       $('#signupInputError').append(`<p style='color:red'>${errorResult.errors[n]}</p>`);
     }
@@ -85,12 +83,12 @@ function clearSignupForm() {
   $('#signupInputError').text('');
 }
 
+// TODO: replaces /api/new-user
 function submitSignupToDb(user) {
-  $.post('/api/new-user',user)
-    .then( () => {
-      $('#signupForm').html('<div class="text-center"><h4>User submitted! Please login now.</h4></div>');
-    })
-    .catch(err => console.log('err',err));
+  $.post('/api/users/signup',user)
+    .then( data => {
+      $('#signupForm').html(`<div class="text-center"><h4>User "${data.username}" submitted! Please login now.</h4></div>`);
+    });
 }
  
 
@@ -103,7 +101,6 @@ async function validateLogin() {
   event.preventDefault();
 
   let user = captureUserInputs('login');
-
   let userObj = await checkDbForLoginCredentials(user);
   if (userObj !== null) {
     welcomeUser(userObj);
