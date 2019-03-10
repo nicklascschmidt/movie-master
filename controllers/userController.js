@@ -1,34 +1,19 @@
 const db = require("../models");
 
-// Defining methods for the userController
+// Defines methods for the userController
 module.exports = {
-  findOne: function(req,res) {
-    db.User
-      .findOne({ where: req.query })
-      .then(dbUser => res.json(dbUser))
-      .catch(err => res.status(422).json(err));
-  },
+  // Add user
   create: function(req,res) {
-    console.log('\n\n\n\nreq.body',req.body);
     db.User
       .create(req.body)
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
   },
-
-
-  findAll: function(req, res) {
-    console.log('req.query',req.query);
+  // Check user login credentials
+  findOne: function(req,res) {
     db.User
-      // .find({ where: req.query })
-      .findAll()
+      .findOne({ where: req.query })
       .then(dbUser => res.json(dbUser))
       .catch(err => res.status(422).json(err));
-  },
-  findById: function(req, res) {
-    db.User
-      .findById(req.params.id)
-      .then(dbUser => res.json(dbUser))
-      .catch(err => res.status(422).json(err));
-  },
+  }
 };

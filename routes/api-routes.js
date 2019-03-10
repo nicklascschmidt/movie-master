@@ -4,39 +4,6 @@ const db = require('../models');
 
 module.exports = function(app) {
 
-  // Add a user
-  app.post('/api/new-user', function(req, res) {
-    // console.log('req.body',req.body);
-    db.User.create({
-      username: req.body.username,
-      password: req.body.password
-    })
-      .then( () => {
-        res.end();
-      })
-      .catch(err => {
-        console.log(err);
-        res.sendStatus(500);
-      }
-    )
-  });
-
-  // Check login credentials
-  app.get('/api/find-user', function(req,res) {
-    // console.log('req.query',req.query);
-    db.User.findOne({
-      where: req.query
-    })
-      .then(data => {
-        res.json(data);
-      })
-      .catch(err => {
-        console.log(err);
-        res.sendStatus(500);
-      }
-    )
-  });
-
   // Add a movie to to-do list
   app.post('/api/add-movie-to-watchlist', function(req,res) {
     // console.log('req.body',req.body);
