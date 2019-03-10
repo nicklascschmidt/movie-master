@@ -1,7 +1,8 @@
 // Login/signup page, frontend validation, rerouting to My Movies page
 
+
 // On doc load--
-// if user is already logged in, hide signup/login form.
+// If user is already logged in, hide signup/login form.
 // If not, hide the "already signed in" message.
 $(document).ready(handleOnLoad);
 
@@ -104,7 +105,6 @@ async function validateLogin() {
   let user = captureUserInputs('login');
 
   let userObj = await checkDbForLoginCredentials(user);
-
   if (userObj !== null) {
     welcomeUser(userObj);
   } else {
@@ -112,10 +112,9 @@ async function validateLogin() {
   }
 }
 
+// TODO: replaces /api/find-user
 function checkDbForLoginCredentials(user) {
-  return $.get('/api/find-user',user)
-    .then(response => response)
-    .catch(err => console.log('err',err));
+  return $.get('/api/users/login', user).then(response => response);
 }
 
 // Show welcome message and initiate countdown (to redirect)
