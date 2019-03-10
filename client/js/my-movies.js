@@ -1,6 +1,10 @@
+// Loads movies from user's watchlist (watched + unwatched)
+// Sets logic to handle changes to user movie rating, watch/unwatched, remove from watchlist
+// TODO: comment this doc!!
+
 $(document).ready(handleMoviesOnLoad());
 
-
+// If user is logged in, displays watchlist movies on page. If not, displays message.
 async function handleMoviesOnLoad() {
   let userId = sessionStorage.getItem('movieMasterId');
   let unwatchedMovies = await pullMoviesFromDb('unwatched');
@@ -13,14 +17,14 @@ async function handleMoviesOnLoad() {
   }
 }
 
+// Build div for each movie, append to HTML div
+// If no movies on watchlist, show message
 function displayMovies(array,type) {
   $(`#${type}-movies`).empty();
-  let $movieDiv = $('<div>');
   if (array.length > 0) {
     for (let n=0; n < array.length; n++) {
-      let $movie = $('<div>');
-      $movie.html(`
-        <div class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
+      let $movie = $(`
+        <div id='movie${array[n].id}' class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
           <div class='col-3 text-center'>
             <img src=${array[n].posterUrl} width='100%' style='margin:10px 0'>
           </div>
@@ -43,31 +47,34 @@ function displayMovies(array,type) {
             <button class='btn btn-info btn-sm removeFromList' data-id='${array[n].id}'><i class="fas fa-trash-alt"></i> Remove from List</button>
           </div>
         </div>
-      `)
-      $movieDiv.append($movie);
+      `);
+      $(`#${type}-movies`).append($movie);
     }
   } else {
-    $movieDiv.text('No movies to show.');
+    let message = (type === 'unwatched') ? 'No movies on your watchlist. Please add movies to your watchlist on the Movie Search page.' : 'No movies to show.';
+    $(`#${type}-movies`).html(`<h5 class='text-center'>${message}</h5>`);
   }
-  $(`#${type}-movies`).append($movieDiv);
 }
+
+
 
 $('body').on('click','.removeFromList',removeFromList);
 
-function removeFromList() {
+async function removeFromList() {
   let id = $(this).attr('data-id');
-  let queryObj = {
-    id: id
-  }
+  let queryObj = { id };
   $.ajax({
     url: '/api/remove-movie-from-db',
-    method: 'DELETE',
+    method: 'POST',
     data: queryObj,
+    success: function(resp) {
+      console.log('delete success',resp);
+      handleMoviesOnLoad();
+    },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log('ajax error', textStatus, errorThrown);
     }
-  })
-  handleMoviesOnLoad();
+  });
 }
 
 function watchedOrUnwatched(isWatched) {

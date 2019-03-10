@@ -1,5 +1,7 @@
 // Index handles login/signup, frontend validation, rerouting to My Movies page
 
+// TODO: need to update display so that if user is logged in, display message "You're already logged in. To log into a different account, please log out first (top left)."
+
 // type = signup || login
 function captureUserInputs(type) {
   let user = {
@@ -117,7 +119,7 @@ function welcomeUser(user) {
   function countdownRedirect() {
     countdownNum--;
     if (countdownNum === 0) {
-      window.location = '/search.html'; // bring user to the search page
+      window.location = '/search'; // bring user to the search page
     } else {
       $('#countdownRedirect').text(`Taking you to the Movie Search page in ${countdownNum}`);
     }
