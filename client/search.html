@@ -37,36 +37,36 @@
     <div id='movie-container' class='container-fluid row'>
       <div class='col-6'>
         <div class='card'>
-          <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+          <div class='card-header d-inline-flex justify-content-between'>
             <h3>Scrape IMDB Top 250</h3>
             <div class="dropdown">
               <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Scrape
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='1'>Page 1 (1-50)</p>
-                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='51'>Page 2 (51-100)</p>
-                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='101'>Page 3 (101-150)</p>
-                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='151'>Page 4 (151-200)</p>
-                <p class='scrapeImdb dropdown-item' style='cursor:pointer' data-pageStart='201'>Page 5 (201-250)</p>
+                <p class='scrapeImdb dropdown-item' data-pageStart='1'>Page 1 (1-50)</p>
+                <p class='scrapeImdb dropdown-item' data-pageStart='51'>Page 2 (51-100)</p>
+                <p class='scrapeImdb dropdown-item' data-pageStart='101'>Page 3 (101-150)</p>
+                <p class='scrapeImdb dropdown-item' data-pageStart='151'>Page 4 (151-200)</p>
+                <p class='scrapeImdb dropdown-item' data-pageStart='201'>Page 5 (201-250)</p>
               </div>
             </div>
           </div>
-          <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
+          <div class='card-body'>
             <div id='scrapeDisplay'></div>
           </div>
         </div>
       </div>
       <div class='col-6'>
         <div class='card'>
-          <div class='card-header d-inline-flex justify-content-between' style='background-color: black; color: white; border-radius: 5px 5px 0 0'>
+          <div class='card-header d-inline-flex justify-content-between'>
             <h3>Search</h3>
             <form class='form-inline'>
-              <input type='text' class='form-control form-control-sm' placeholder='search...' id='searchInput' style='color:white'>
+              <input type='text' class='form-control form-control-sm p-2' placeholder='search...' id='searchInput'>
               <button type='submit' class='btn btn-info btn-sm ml-3' id='searchInputSubmit'>Search</button>
             </form>
           </div>
-          <div class='card-body' style='background-color: rgba(179, 90, 179, 0.3)'>
+          <div class='card-body'>
             <div id='searchDisplay'></div>
           </div>
         </div>
