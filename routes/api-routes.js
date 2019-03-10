@@ -157,8 +157,7 @@ module.exports = function(app) {
     db.Movie.destroy({
       where: req.body
     })
-      // .then( data => console.log(`updated ${data} record`))
-      .then( data => data)
+      .then( data => res.send(true))
       .catch( err => console.log('err',err))
   })
 };

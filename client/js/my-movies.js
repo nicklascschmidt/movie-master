@@ -68,8 +68,9 @@ async function removeFromList() {
     method: 'POST',
     data: queryObj,
     success: function(resp) {
-      console.log('delete success',resp);
-      handleMoviesOnLoad();
+      if (resp) {
+        handleMoviesOnLoad();
+      }
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log('ajax error', textStatus, errorThrown);

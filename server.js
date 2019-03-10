@@ -15,8 +15,9 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Make client a static folder
-app.use(express.static(path.join(__dirname, 'client')))
+// Make client and assets static folders
+app.use('/assets',express.static(path.join(__dirname, '/client/assets')));
+app.use(express.static(path.join(__dirname, '/client')));
 
 require("./routes/html-routes")(app);
 require("./routes/api-routes")(app);
@@ -24,9 +25,9 @@ require("./routes/scrape-routes")(app);
 
 const db = require("./models");
 
-const force = { force: false} // true resets db
+const forceBool = { force: false} // true resets db
 
-db.sequelize.sync(force).then(function() {
+db.sequelize.sync(forceBool).then(function() {
   app.listen(PORT, function() {
     console.log(`🌎  ==> App running on PORT ${PORT}!`);
   });
