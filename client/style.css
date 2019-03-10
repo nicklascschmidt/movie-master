@@ -59,10 +59,6 @@ input[type=text].form-control, input[type=password].form-control {
   border-radius: 5px;
 }
 
-.hide-me {
-  /* display: none; */
-}
-
 /* Search Page */
 .handleAddToWatchlist {
   overflow: hidden;
@@ -76,9 +72,6 @@ input[type=text].form-control, input[type=password].form-control {
   padding: 5px;
 }
 
-.margin-custom {
-  margin: 20px 0;
-}
 
 .img-custom {
   margin: 10px 0;

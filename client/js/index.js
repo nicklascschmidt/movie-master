@@ -1,11 +1,18 @@
-// Index handles login/signup, frontend validation, rerouting to My Movies page
+// Login/signup page, frontend validation, rerouting to My Movies page
 
-// TODO: need to update display so that if user is logged in, display message "You're already logged in. To log into a different account, please log out first (top left)."
 
-$(document).ready(handleOnLoad());
+// On doc load--
+// if user is already logged in, hide signup/login form.
+// If not, hide the "already signed in" message.
+$(document).ready(handleOnLoad);
 
 function handleOnLoad() { 
-  $('#userForms').show();
+  let userId = sessionStorage.getItem('movieMasterId');
+  if (userId !== null) {
+    $('#alreadyLoggedIn').show();
+  } else {
+    $('#userForms').show();
+  }
 }
 
 // type = signup || login
