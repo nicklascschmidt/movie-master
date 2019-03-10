@@ -69,7 +69,7 @@ async function loadAddToWatchlistButton(title, imdbID) {
   let userId = sessionStorage.getItem('movieMasterId');
   let duplicateBoolean = await checkIfExists(userId, title);
   if (!duplicateBoolean) {
-    return `<button class='btn btn-info btn-sm mt-2 mb-2 handleAddToWatchlist' data-imdbId='${imdbID}' data-title='${title}'><i class="fas fa-plus-circle"></i> Add to Watchlist</button>`
+    return `<button class='btn btn-success btn-sm mt-2 mb-2 handleAddToWatchlist' data-imdbId='${imdbID}' data-title='${title}'><i class="fas fa-plus-circle"></i> Add to Watchlist</button>`
   } else {
     return '<p>Added to Watchlist</p>'
   }

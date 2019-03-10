@@ -42,8 +42,8 @@ function displayMovies(array,type) {
             <p>Director: ${array[n].director} | Stars: ${array[n].actors}</p>
           </div>
           <div class='col-12 d-inline-flex p-1 justify-content-around'>
-            <button class='btn btn-info btn-sm markAsWatched' data-isWatched='${array[n].isWatched}' data-id='${array[n].id}'>${watchedOrUnwatched(array[n].isWatched)}</button>
-            <button class='btn btn-info btn-sm removeFromList' data-id='${array[n].id}'><i class="fas fa-trash-alt"></i> Remove from List</button>
+            <button class='btn btn-primary btn-sm markAsWatched' data-isWatched='${array[n].isWatched}' data-id='${array[n].id}'>${watchedOrUnwatched(array[n].isWatched)}</button>
+            <button class='btn btn-danger btn-sm removeFromList' data-id='${array[n].id}'><i class="fas fa-trash-alt"></i> Remove from List</button>
           </div>
         </div>
       `);
@@ -117,7 +117,7 @@ function getUserRating(rating,id) {
   if (rating !== null) {
     return `<p>My Rating: <i class="far fa-star"></i> ${ratingFormatted}</p>`
   } else {
-    return `<div class='switchToUserRatingForm text-right' data-id='${id}'><button class='btn btn-info btn-sm'>rate</button></div>`
+    return `<div class='switchToUserRatingForm text-right' data-id='${id}'><button class='btn btn-warning btn-sm'>rate</button></div>`
   }
 }
 
@@ -129,8 +129,8 @@ function switchToUserRatingForm() {
   $(this).replaceWith(`
     <div class='' id='div${id}'>
       <form class='form-inline float-right'>
-        <input type='text' class='form-control form-control-sm' placeholder='#' id='input${id}' style='width:30px'>
-        <button type='submit' class='submitUserRating btn btn-info btn-sm ml-3' data-id='${id}'>Submit</button>
+        <input type='text' class='form-control form-control-sm' placeholder='#.#' id='input${id}' style='width:30px'>
+        <button type='submit' class='submitUserRating btn btn-success btn-sm ml-3' data-id='${id}'>Submit</button>
       </form>
     </div>
   `)

@@ -60,6 +60,10 @@ input[type=text].form-control, input[type=password].form-control {
 }
 
 /* Search Page */
+#dropdownMenuButton::after {
+  content: 'hi'
+}
+
 .handleAddToWatchlist {
   overflow: hidden;
 }
