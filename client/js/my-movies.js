@@ -7,8 +7,8 @@ $(document).ready(handleMoviesOnLoad());
 // If user is logged in, displays watchlist movies on page. If not, displays message.
 async function handleMoviesOnLoad() {
   let userId = sessionStorage.getItem('movieMasterId');
-  let unwatchedMovies = await pullMoviesFromDb('unwatched');
-  let watchedMovies = await pullMoviesFromDb('watched');
+  let unwatchedMovies = await pullMoviesFromDb('unwatched',userId);
+  let watchedMovies = await pullMoviesFromDb('watched',userId);
   if (userId) {
     displayMovies(unwatchedMovies,'unwatched');
     displayMovies(watchedMovies,'watched');
@@ -40,7 +40,7 @@ function displayMovies(array,type) {
               </div>
             </div>
             <p>${array[n].plot}</p>
-            <p>Director: ${array[n].director} | Stars: ${getActors(array[n].actors)}</p>
+            <p>Director: ${array[n].director} | Stars: ${array[n].actors}</p>
           </div>
           <div class='col-12 d-inline-flex p-1 justify-content-around'>
             <button class='btn btn-info btn-sm markAsWatched' data-isWatched='${array[n].isWatched}' data-id='${array[n].id}'>${watchedOrUnwatched(array[n].isWatched)}</button>
@@ -57,7 +57,8 @@ function displayMovies(array,type) {
 }
 
 
-
+// When remove button is clicked, delete from DB and reload items.
+// (Have to reload to show message if empty - can't just remove the movie)
 $('body').on('click','.removeFromList',removeFromList);
 
 async function removeFromList() {
@@ -78,6 +79,7 @@ async function removeFromList() {
   });
 }
 
+// When movies are loaded, shows diff message for each movie
 function watchedOrUnwatched(isWatched) {
   if (isWatched) {
     return `<i class="fas fa-eye-slash"></i> Mark as unwatched`
@@ -86,28 +88,31 @@ function watchedOrUnwatched(isWatched) {
   }
 }
 
+// When mark as watched button is clicked, update the DB and reload the movies
 $('body').on('click','.markAsWatched',markAsWatched);
 
 function markAsWatched() {
-  let id = $(this).attr('data-id');
-  let isWatched = $(this).attr('data-isWatched');
-
   let queryObj = {
-    id: id,
-    isWatched: isWatched
+    id: $(this).attr('data-id'),
+    isWatched: $(this).attr('data-isWatched')
   }
   $.ajax({
     url: '/api/update-isWatched',
     method: 'PUT',
     data: queryObj,
+    success: function(resp) {
+      if (resp) {
+        handleMoviesOnLoad();
+      }
+    },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log('ajax error',textStatus, errorThrown);
     }
   })
-  .catch( err => err)
-  handleMoviesOnLoad();
+  .catch( err => err);
 }
 
+// reformats the user rating to a # with one decimal
 function getUserRating(rating,id) {
   let ratingFormatted = parseFloat(rating).toFixed(1);
   if (rating !== null) {
@@ -117,6 +122,7 @@ function getUserRating(rating,id) {
   }
 }
 
+// When "Rate" button is clicked, replace the button with a form
 $('body').on('click','.switchToUserRatingForm',switchToUserRatingForm);
 
 function switchToUserRatingForm() {
@@ -131,6 +137,8 @@ function switchToUserRatingForm() {
   `)
 }
 
+// When user rating is submitted, validate inputs.
+// If valid, update rating in DB and replace the form with the user's rating.
 $('body').on('click','.submitUserRating',submitUserRating);
 
 function submitUserRating() {
@@ -151,6 +159,7 @@ function submitUserRating() {
   }
 }
 
+// User rating validation (simple) - must be a # between 0 and 10
 function validateUserRating(rating) {
   let errorObj = {
     isError: null,
@@ -166,10 +175,7 @@ function validateUserRating(rating) {
 }
 
 function submitUserRatingToDb(rating,id) {
-  let queryObj = {
-    rating: rating,
-    id: id
-  }
+  let queryObj = { rating, id };
   $.ajax({
     url: '/api/update-user-rating',
     method: 'PUT',
@@ -181,22 +187,11 @@ function submitUserRatingToDb(rating,id) {
   .catch( err => console.log('err',err))
 }
 
-function getActors(actors) {
-  // console.log('actors',actors);
-  return actors
-}
-
-function pullMoviesFromDb(type) {
+// Pulls movies for a certain type (watched/unwatched), returns an array of movie objects
+function pullMoviesFromDb(type,userId) {
   let queryObj = {
-    isWatched: null,
-    UserId: sessionStorage.getItem('movieMasterId')
-  }
-  if (type === 'watched') {
-    queryObj.isWatched = 1
-  } else if (type === 'unwatched') {
-    queryObj.isWatched = 0
-  } else {
-    // nothing
+    isWatched: (type === 'watched') ? 1 : 0,
+    UserId: userId
   }
   return $.get('/api/get-all-movies',queryObj)
     .then( response => response)

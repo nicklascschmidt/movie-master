@@ -120,9 +120,7 @@ module.exports = function(app) {
         id: req.body.id
       }
     })
-      .then( data => {
-        // console.log(`updated ${data} record`)
-      })
+      .then( () => res.send(true))
       .catch( err => console.log('err',err))
   })
 
@@ -157,7 +155,7 @@ module.exports = function(app) {
     db.Movie.destroy({
       where: req.body
     })
-      .then( data => res.send(true))
+      .then( () => res.send(true))
       .catch( err => console.log('err',err))
   })
 };
