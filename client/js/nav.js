@@ -3,10 +3,10 @@
 $(document).ready( () => {
   let userIdCheck = sessionStorage.getItem('movieMasterId');
   if (userIdCheck !== null) {
-    $('#navLogin').html(`<button type='button' id='navLoginButton' class='btn btn-primary nav-button'>Log Out</button>`);
+    $('#navLogin').html(`<div class='nav-link'><button type='button' id='navLoginButton' class='btn btn-sm btn-danger'>Log Out</button></div>`);
     $('#navMyMovies').show();
   } else {
-    $('#navLogin').html(`<a href='/' class='btn btn-info nav-button'>Login / Signup</a>`);
+    $('#navLogin').html(`<a href='/' class='nav-link'><button type='button' class='btn btn-sm btn-primary'>Login / Signup</button></a>`);
   }
 
   // If logout clicked, reset session storage and reload page

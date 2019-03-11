@@ -15,8 +15,8 @@ body {
   background-repeat: repeat;
 }
 
-.nav-button {
-  margin: 0 .5rem;
+.nav-link {
+  font-size: 1rem;
 }
 
 .helper {
