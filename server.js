@@ -7,6 +7,7 @@ require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 
+// Bring in routes, initialize express, define dev port
 const routes = require("./routes");
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,5 +27,3 @@ db.sequelize.sync(forceBool).then(function() {
     console.log(`🌎  ==> App running on PORT ${PORT}!`);
   });
 });
-
-// module.exports = app;
