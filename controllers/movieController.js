@@ -9,12 +9,32 @@ module.exports = {
       .then(dbMovies => res.json(dbMovies))
       .catch(err => res.status(422).json(err));
   },
-
+  // Deletes movie from DB
   remove: function(req, res) {
     console.log('\n\nreq.params',req.params,'\n\n')
     db.Movie
       .destroy({ where: req.params })
       .then(deletedResp => res.json(deletedResp))
+      .catch(err => res.status(422).json(err));
+  },
+  // Updates isWatched to the opposite (bool)
+  updateWatched: function(req, res) {
+    let id = { id: req.params.id };
+    let opposite = req.body.isWatched === 'true' ? false : true;
+    db.Movie
+      .update( { isWatched: opposite }, { where: id })
+      .then( data => res.json(data))
+      .catch(err => res.status(422).json(err));
+  },
+
+  updateRating: function(req, res) {
+    console.log('\n\nreq.params',req.params,'\n\n');
+    console.log('\n\nreq.body',req.body,'\n\n');
+
+    let id = { id: req.params.id };
+    db.Movie
+      .update( { userRating: req.body.rating }, { where: id })
+      .then( data => res.json(data))
       .catch(err => res.status(422).json(err));
   },
 

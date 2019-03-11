@@ -115,14 +115,4 @@ module.exports = function(app) {
     )
   })
 
-  // Delete from DB
-  app.post('/api/remove-movie-from-db', function(req,res) {
-    console.log('req.body',req.body);
-
-    db.Movie.destroy({
-      where: req.body
-    })
-      .then( () => res.send(true))
-      .catch( err => console.log('err',err))
-  })
 };

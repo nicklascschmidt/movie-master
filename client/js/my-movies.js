@@ -1,6 +1,8 @@
 // Loads movies from user's watchlist (watched + unwatched).
 // Sets logic to handle changes to user movie rating, watch/unwatched, remove from watchlist.
 
+// TODO: update rating system thing to show edit button and allow editing (orange)
+
 $(document).ready(handleMoviesOnLoad());
 
 // If user is logged in, displays watchlist movies on page. If not, displays message.
@@ -72,14 +74,14 @@ function displayMovies(array,type) {
 $('body').on('click','.removeFromList',removeFromList);
 
 async function removeFromList() {
-  let id = $(this).attr('data-id');
+  let movieId = $(this).attr('data-id');
   $.ajax({
-    url: `/api/movies/delete/${id}`,
+    url: `/api/movies/delete/${movieId}`,
     method: 'DELETE',
     success: data => {
       (data === 1) ? handleMoviesOnLoad() : null;
     },
-    error: function(jqXHR, textStatus, errorThrown) {
+    error: (jqXHR, textStatus, errorThrown) => {
       console.log('ajax error', textStatus, errorThrown);
     }
   });
@@ -98,24 +100,17 @@ function watchedOrUnwatched(isWatched) {
 $('body').on('click','.markAsWatched',markAsWatched);
 
 function markAsWatched() {
-  let queryObj = {
-    id: $(this).attr('data-id'),
-    isWatched: $(this).attr('data-isWatched')
-  }
+  let isWatched = $(this).attr('data-isWatched');
+  let movieId = $(this).attr('data-id');
   $.ajax({
-    url: '/api/update-isWatched',
+    url: `/api/movies/update-watched/${movieId}`,
     method: 'PUT',
-    data: queryObj,
-    success: function(resp) {
-      if (resp) {
-        handleMoviesOnLoad();
-      }
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log('ajax error',textStatus, errorThrown);
+    data: { isWatched },
+    success: data => (data) ? handleMoviesOnLoad() : null,
+    error: (jqXHR, textStatus, errorThrown) => {
+      console.log('ajax error', textStatus, errorThrown);
     }
-  })
-  .catch( err => err);
+  });
 }
 
 // Reformat the user rating to a # with one decimal.
@@ -181,14 +176,13 @@ function validateUserRating(rating) {
 }
 
 function submitUserRatingToDb(rating,id) {
-  let queryObj = { rating, id };
   $.ajax({
-    url: '/api/update-user-rating',
+    url: `/api/movies/update-rating/${id}`,
     method: 'PUT',
-    data: queryObj,
+    data: { rating },
+    success: data => data,
     error: (jqXHR, textStatus, errorThrown) => {
-      console.log('ajax error',textStatus, errorThrown);
+      console.log('ajax error', textStatus, errorThrown);
     }
-  })
-  .catch( err => console.log('err',err))
+  });
 }
