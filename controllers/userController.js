@@ -1,6 +1,6 @@
 const db = require("../models");
 
-// Defines methods for the userController
+// Methods
 module.exports = {
   // Add user
   create: function(req,res) {

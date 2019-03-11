@@ -1,6 +1,6 @@
 .background-image {
   color: white;
-  background-image: url("./assets/prism.png");
+  background-image: url("../assets/prism.png");
   background-repeat: repeat;
   border-radius: 0;
 }
@@ -11,7 +11,7 @@ html, body {
 }
 
 body {
-  background-image: url("./assets/dust_scratches.png");
+  background-image: url("../assets/dust_scratches.png");
   background-repeat: repeat;
 }
 

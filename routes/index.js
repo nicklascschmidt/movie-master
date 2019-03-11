@@ -1,9 +1,11 @@
 const path = require("path");
 const router = require("express").Router();
 const apiRoutes = require("./api");
+const scrapeRoutes = require("./scrape");
 
-// API Routes
+// API Routes (from folder)
 router.use("/api", apiRoutes);
+router.use("/scrape", scrapeRoutes);
 
 // No middleware action needed - If no API routes are hit, send application
 router.use((req, res, next) => {
@@ -11,13 +13,13 @@ router.use((req, res, next) => {
 });
 
 router.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../','client','index.html'));
+  res.sendFile(path.join(__dirname, '../','client','pages','index.html'));
 })
 router.get('/my-movies', function(req, res) {
-  res.sendFile(path.join(__dirname, '../','client','my-movies.html'));
+  res.sendFile(path.join(__dirname, '../','client','pages','my-movies.html'));
 });
 router.get('/search', function(req, res) {
-  res.sendFile(path.join(__dirname, '../','client','search.html'));
+  res.sendFile(path.join(__dirname, '../','client','pages','search.html'));
 });
 
 module.exports = router;

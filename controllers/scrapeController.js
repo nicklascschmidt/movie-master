@@ -1,17 +1,17 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-module.exports = function(app) {
-  
-  // Scrape IMDB page and send back an array of movies to the client.
-  app.get("/scrape/imdb", async function(req, res) {
-    let link = `https://www.imdb.com/search/title?groups=top_250&sort=user_rating,desc&start=${req.query.pageStart}`;
-    let imdbArray = [];
+// Methods
+module.exports = {
+  // Scrape IMDB, send array of IDs back to client
+  scrapeImdb: async function(req,res) {
+    let link = `https://www.imdb.com/search/title?groups=top_250&sort=user_rating,desc&start=${req.params.page}`;
     let arrayOfIds = await axios.get(link)
       .then( response => {
+        // If req goes through, load HTML into cheerio and find the unique ID. Push into array, then return the array.
         if (response.status === 200) {
-          // Load HTML into cheerio and find the unique ID
           let $ = cheerio.load(response.data);
+          let imdbArray = [];
           $('div.lister-item').each( function(i, element) {
             imdbArray.push(
               $(this)
@@ -19,13 +19,12 @@ module.exports = function(app) {
                 .find('a')
                 .find('img')
                 .attr('data-tconst')
-            )
-          })
+            );
+          });
           return imdbArray
         }
       }
     );
-  
-    res.send(arrayOfIds);
-  });
+    res.json(arrayOfIds)
+  }
 };

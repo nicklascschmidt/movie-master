@@ -6,6 +6,12 @@ const movieController = require("../../controllers/movieController");
 router.route("/")
   .get(movieController.findAll);
 
+router.route("/add")
+  .post(movieController.create);
+
+router.route("/find")
+  .get(movieController.findOne);
+
 router.route("/delete/:id")
   .delete(movieController.remove);
 

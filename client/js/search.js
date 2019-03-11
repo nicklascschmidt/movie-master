@@ -12,19 +12,16 @@ $('body').on('click', '.scrapeImdb', scrapeDropdownClicked);
 
 // Grab page # and scrape IMDB.
 function scrapeDropdownClicked() {
-  let pageStart = $(this).attr('data-pageStart'); // grab page
   $('#scrapeDisplay').html('<h4>Scraping movies...</h4>'); // loading message
+  let pageStart = $(this).attr('data-pageStart'); // grab page
   scrapeImdb(pageStart);
 }
 
 // Scrape, then display results.
 function scrapeImdb(page) {
-  let queryObj = {
-    pageStart: page
-  }
-  $.getJSON('/scrape/imdb', queryObj, data => {
+  $.get(`/scrape/imdb/${page}`, data => {
     displayMovies(data, 'scrapeDisplay');
-  })
+  });
 }
 
 // Loop through each array element and display movie info (rolling basis)
@@ -76,19 +73,46 @@ async function loadAddToWatchlistButton(title, imdbID) {
 }
 
 // Check if the movie is on the watchlist. If Ajax response is true, then it's a duplicate.
-function checkIfExists(userId, title) {
-  let queryObj = {
-    UserId: userId,
-    title: title
-  }
-  return $.getJSON('/api/check-if-exists', queryObj);
+function checkIfExists(UserId, title) {
+  let queryObj = { UserId, title };
+  return $.getJSON('/api/movies/find', queryObj)
+    .catch( err => console.log(err));
 }
 
 // Type = 'id' or 'title'
 function pullMovieFromOmdb(searchValue, type) {
   let searchType = (type === 'id') ? 'i' : 's';
   return $.getJSON(`https://www.omdbapi.com/?apikey=${omdbApiKey}&${searchType}=${searchValue}`)
+    .catch( err => console.log(err));
 }
+
+
+
+
+// ------------------------------------------------------------------
+//              Search
+// ------------------------------------------------------------------
+
+$('body').on('click', '#searchInputSubmit', submitSearch);
+
+// Get array of movies (max 10) based on search input
+// Pass array of imdbIds into displayMovies func
+// Use array of IDs to get full movie objects
+async function submitSearch() {
+  event.preventDefault();
+  let searchTerm = $('#searchInput').val().trim();
+  let omdbMovieArray = await pullMovieFromOmdb(searchTerm, 'title'); // search results don't give the full object
+  let splicedOmdbMovieArray = (omdbMovieArray.Search.length > 10) ? omdbMovieArray.Search.splice(0, 10) : omdbMovieArray.Search; // limit the search results to 10
+  let imdbIdArray = splicedOmdbMovieArray.map( movie => {
+    return movie.imdbID
+  })
+  
+  $('#searchDisplay').html('<h4>Loading search results...</h4>');
+  displayMovies(imdbIdArray, 'searchDisplay');
+}
+
+
+
 
 // ------------------------------------------------------------------
 //              Add to watchlist
@@ -129,28 +153,7 @@ async function addMovieToDb(imdbId, userId) {
 
     isWatched: false
   }
-  $.post('/api/add-movie-to-watchlist', movie)
+  $.post('/api/movies/add', movie)
+    .then(data => data)
     .catch( err => console.log(err));
-}
-
-// ------------------------------------------------------------------
-//              Search
-// ------------------------------------------------------------------
-
-$('body').on('click', '#searchInputSubmit', submitSearch);
-
-// Get array of movies (max 10) based on search input
-// Pass array of imdbIds into displayMovies func
-// Use array of IDs to get full movie objects
-async function submitSearch() {
-  event.preventDefault();
-  let searchTerm = $('#searchInput').val().trim();
-  let omdbMovieArray = await pullMovieFromOmdb(searchTerm, 'title'); // search results don't give the full object
-  let splicedOmdbMovieArray = (omdbMovieArray.Search.length > 10) ? omdbMovieArray.Search.splice(0, 10) : omdbMovieArray.Search; // limit the search results to 10
-  let imdbIdArray = splicedOmdbMovieArray.map( movie => {
-    return movie.imdbID
-  })
-  
-  $('#searchDisplay').html('<h4>Loading search results...</h4>');
-  displayMovies(imdbIdArray, 'searchDisplay');
 }

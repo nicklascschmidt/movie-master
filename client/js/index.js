@@ -85,7 +85,7 @@ function clearSignupForm() {
 
 // Adds user to DB
 function submitSignupToDb(user) {
-  $.post('/api/users/signup',user)
+  $.post('/api/users/signup', user)
     .then( data => {
       $('#signupForm').html(`<div class="text-center"><h4>User "${data.username}" submitted! Please login now.</h4></div>`);
     })
