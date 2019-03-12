@@ -1,7 +1,7 @@
 // Loads movies from user's watchlist (watched + unwatched).
 // Sets logic to handle changes to user movie rating, watch/unwatched, remove from watchlist.
 
-// TODO: update rating system thing to show edit button and allow editing (orange)
+// TODO: update rating system to show edit button and allow editing (orange)
 
 $(document).ready(handleMoviesOnLoad());
 
@@ -11,10 +11,11 @@ async function handleMoviesOnLoad() {
   let unwatchedMovies = await pullMoviesFromDb('unwatched',userId);
   let watchedMovies = await pullMoviesFromDb('watched',userId);
   if (userId) {
+    $(`#movie-container`).show();
     displayMovies(unwatchedMovies,'unwatched');
     displayMovies(watchedMovies,'watched');
   } else {
-    $(`#movie-container`).html(`<h4 style='margin:auto'>Please signup and/or login to start tracking movies.</h4>`);
+    $(`#movie-container`).show().html(`<h4 class='mx-auto'>Please signup and/or login to start tracking movies.</h4>`);
   }
 }
 
@@ -36,18 +37,18 @@ function displayMovies(array,type) {
   if (array.length > 0) {
     for (let n=0; n < array.length; n++) {
       let $movie = $(`
-        <div id='movie${array[n].id}' class='row' style='background-color:white; border:1px solid black; border-radius:15px; margin:0 0 10px 0; padding: 5px'>
-          <div class='col-3 text-center'>
-            <img src=${array[n].posterUrl} width='100%' style='margin:10px 0'>
+        <div id='movie${array[n].id}' class='row p-2 mb-2 movie-custom'>
+          <div class='col-12 col-sm-3 text-center'>
+            <img src=${array[n].posterUrl} class='img-custom'>
           </div>
-          <div class='col-9'>
+          <div class='col-12 col-sm-9'>
             <div class='row'>
-              <div class='col-7'>
-                <h4 style="display:inline-block"><a href=${array[n].imdbUrl} target='_blank'><strong>${array[n].title}</strong></a></h4> <h5 style="display:inline-block">(${array[n].year})</h5>
+              <div class='col-8'>
+                <h4 class='d-inline-block'><a href=${array[n].imdbUrl} target='_blank'><strong>${array[n].title}</strong></a></h4> <h5 class='d-inline-block'>(${array[n].year})</h5>
                 <p>${array[n].maturityRating} | ${array[n].lengthInMinutes} min | ${array[n].genre}</p>
               </div>
-              <div class='col-5 text-right'>
-                <p>IMDB Rating: <i class="fas fa-star"></i> ${array[n].imdbRating}</p>
+              <div class='col-4 text-right'>
+                <p>IMDB <i class="fas fa-star"></i> ${array[n].imdbRating}</p>
                 ${getUserRating(array[n].userRating,array[n].id)}
               </div>
             </div>
@@ -56,7 +57,7 @@ function displayMovies(array,type) {
           </div>
           <div class='col-12 d-inline-flex p-1 justify-content-around'>
             <button class='btn btn-primary btn-sm markAsWatched' data-isWatched='${array[n].isWatched}' data-id='${array[n].id}'>${watchedOrUnwatched(array[n].isWatched)}</button>
-            <button class='btn btn-danger btn-sm removeFromList' data-id='${array[n].id}'><i class="fas fa-trash-alt"></i> Remove from List</button>
+            <button class='btn btn-danger btn-sm removeFromList' data-id='${array[n].id}'><i class="fas fa-trash-alt"></i> Remove</button>
           </div>
         </div>
       `);
@@ -117,7 +118,7 @@ function markAsWatched() {
 function getUserRating(rating,id) {
   let ratingFormatted = parseFloat(rating).toFixed(1);
   if (rating !== null) {
-    return `<p>My Rating: <i class="far fa-star"></i> ${ratingFormatted}</p>`
+    return `<p>My <i class="far fa-star"></i> ${ratingFormatted}</p>`
   } else {
     return `<div class='switchToUserRatingForm text-right' data-id='${id}'><button class='btn btn-warning btn-sm'>rate</button></div>`
   }
@@ -129,13 +130,13 @@ $('body').on('click','.switchToUserRatingForm',switchToUserRatingForm);
 function switchToUserRatingForm() {
   let id = $(this).attr('data-id');
   $(this).replaceWith(`
-    <div class='' id='div${id}'>
-      <form class='form-inline float-right'>
-        <input type='text' class='form-control form-control-sm' placeholder='#.#' id='input${id}' style='width:30px'>
-        <button type='submit' class='submitUserRating btn btn-success btn-sm ml-3' data-id='${id}'>Submit</button>
-      </form>
+    <div id='div${id}' class='input-group ml-auto' style='width:70px'>
+      <input type='text' class='form-control form-control-sm p-1' placeholder='# /10' aria-label='testing' id='input${id}'>
+      <div class='input-group-append ml-1'>
+        <button type='button' class='submitUserRating btn btn-success btn-sm' data-id='${id}'><i class="fas fa-check"></i></button>
+      </div>
     </div>
-  `)
+  `);
 }
 
 // When user rating is submitted, validate inputs.
@@ -156,7 +157,7 @@ function submitUserRating() {
     $(`#div${id}`).html(userRatingHtml); // append new html to the container div
   } else {
     $(`.error${id}`).empty();
-    $(`#div${id}`).append(`<p class='error${id}' style='clear:both; color:red'>${errorObj.error}</p>`);
+    $(`#div${id}`).append(`<p class='error${id}' style='color:red'>${errorObj.error}</p>`);
   }
 }
 

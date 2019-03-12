@@ -37,19 +37,19 @@ function displayMovies(array, element) {
     let watchlistButton = await loadAddToWatchlistButton(movie.Title, movie.imdbID);
     let $movie = $('<div>');
     $movie.html(`
-      <div class='row movie-custom'>
-        <div class='col-xs-12 col-sm-3 text-center'>
+      <div class='row p-2 mb-2 movie-custom'>
+        <div class='col-12 col-sm-3 text-center'>
           <img src=${movie.Poster} class='img-custom'>
         </div>
-        <div class='col-xs-12 col-sm-9'>
+        <div class='col-12 col-sm-9'>
           <div class='row'>
-            <div class='col-12 col-lg-7'>
+            <div class='col-8'>
               <h4 class='d-inline-block'><a href=https://www.imdb.com/title/${movie.imdbID}/ target='_blank'><strong>${movie.Title}</strong></a></h4> <h5 class='d-inline-block'>(${movie.Year})</h5>
               <p>${movie.Rated} | ${movie.Runtime} | ${movie.Genre}</p>
             </div>
-            <div class='col-12 col-lg-5 text-right'>
+            <div class='col-4 text-right'>
               ${watchlistButton}
-              <p>IMDB Rating: <i class="fas fa-star"></i> ${movie.imdbRating}</p>
+              <p>IMDB <i class="fas fa-star"></i> ${movie.imdbRating}</p>
             </div>
           </div>
           <p>${movie.Plot}</p>
@@ -66,9 +66,9 @@ async function loadAddToWatchlistButton(title, imdbID) {
   let userId = sessionStorage.getItem('movieMasterId');
   let duplicateBoolean = await checkIfExists(userId, title);
   if (!duplicateBoolean) {
-    return `<button class='btn btn-success btn-sm mt-2 mb-2 handleAddToWatchlist' data-imdbId='${imdbID}' data-title='${title}'><i class="fas fa-plus-circle"></i> Add to Watchlist</button>`
+    return `<button class='btn btn-success btn-sm mt-2 mb-2 handleAddToWatchlist' data-imdbId='${imdbID}' data-title='${title}'><i class="fas fa-plus-circle"></i> Watchlist</button>`
   } else {
-    return '<p>Added to Watchlist</p>'
+    return '<p>On Watchlist</p>'
   }
 }
 
