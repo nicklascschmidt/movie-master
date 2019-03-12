@@ -39,7 +39,7 @@ function displayMovies(array, element) {
     $movie.html(`
       <div class='row p-2 mb-2 movie-custom'>
         <div class='col-12 col-sm-3 text-center'>
-          <img src=${movie.Poster} class='img-custom'>
+          <img src=${movie.Poster} class='img-custom' alt='missing movie image'>
         </div>
         <div class='col-12 col-sm-9'>
           <div class='row'>

@@ -39,7 +39,7 @@ function displayMovies(array,type) {
       let $movie = $(`
         <div id='movie${array[n].id}' class='row p-2 mb-2 movie-custom'>
           <div class='col-12 col-sm-3 text-center'>
-            <img src=${array[n].posterUrl} class='img-custom'>
+            <img src=${array[n].posterUrl} class='img-custom' alt='missing movie image'>
           </div>
           <div class='col-12 col-sm-9'>
             <div class='row'>
