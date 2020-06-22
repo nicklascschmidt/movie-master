@@ -13,7 +13,7 @@ $('body').on('click', '.scrapeImdb', scrapeDropdownClicked);
 // Grab page # and scrape IMDB.
 function scrapeDropdownClicked() {
   $('#scrapeDisplay').html('<h4>Scraping movies...</h4>'); // loading message
-  let pageStart = $(this).attr('data-pageStart'); // grab page
+  const pageStart = $(this).attr('data-pageStart'); // grab page
   scrapeImdb(pageStart);
 }
 
@@ -33,8 +33,8 @@ function displayMovies(array, element) {
   }
 
   async function printMovieToPage(arrayId) {
-    let movie = await pullMovieFromOmdb(arrayId,'id');
-    let watchlistButton = await loadAddToWatchlistButton(movie.Title, movie.imdbID);
+    const movie = await pullMovieFromOmdb(arrayId,'id');
+    const watchlistButton = await loadAddToWatchlistButton(movie.Title, movie.imdbID);
     let $movie = $('<div>');
     $movie.html(`
       <div class='row p-2 mb-2 movie-custom'>
@@ -63,8 +63,8 @@ function displayMovies(array, element) {
 
 // Load text or button based on if the movie exists on watchlist already
 async function loadAddToWatchlistButton(title, imdbID) {
-  let userId = sessionStorage.getItem('movieMasterId');
-  let duplicateBoolean = await checkIfExists(userId, title);
+  const userId = sessionStorage.getItem('movieMasterId');
+  const duplicateBoolean = await checkIfExists(userId, title);
   if (!duplicateBoolean) {
     return `<button class='btn btn-success btn-sm mt-2 mb-2 handleAddToWatchlist' data-imdbId='${imdbID}' data-title='${title}'><i class="fas fa-plus-circle"></i> Watchlist</button>`
   } else {
@@ -74,14 +74,14 @@ async function loadAddToWatchlistButton(title, imdbID) {
 
 // Check if the movie is on the watchlist. If Ajax response is true, then it's a duplicate.
 function checkIfExists(UserId, title) {
-  let queryObj = { UserId, title };
+  const queryObj = { UserId, title };
   return $.getJSON('/api/movies/find', queryObj)
     .catch( err => console.log(err));
 }
 
 // Type = 'id' or 'title'
 function pullMovieFromOmdb(searchValue, type) {
-  let searchType = (type === 'id') ? 'i' : 's';
+  const searchType = (type === 'id') ? 'i' : 's';
   return $.getJSON(`https://www.omdbapi.com/?apikey=${omdbApiKey}&${searchType}=${searchValue}`)
     .catch( err => console.log(err));
 }
@@ -100,12 +100,10 @@ $('body').on('click', '#searchInputSubmit', submitSearch);
 // Use array of IDs to get full movie objects
 async function submitSearch() {
   event.preventDefault();
-  let searchTerm = $('#searchInput').val().trim();
+  const searchTerm = $('#searchInput').val().trim();
   let omdbMovieArray = await pullMovieFromOmdb(searchTerm, 'title'); // search results don't give the full object
-  let splicedOmdbMovieArray = (omdbMovieArray.Search.length > 10) ? omdbMovieArray.Search.splice(0, 10) : omdbMovieArray.Search; // limit the search results to 10
-  let imdbIdArray = splicedOmdbMovieArray.map( movie => {
-    return movie.imdbID
-  })
+  const splicedOmdbMovieArray = (omdbMovieArray.Search.length > 10) ? omdbMovieArray.Search.splice(0, 10) : omdbMovieArray.Search; // limit the search results to 10
+  const imdbIdArray = splicedOmdbMovieArray.map(movie => movie.imdbID)
   
   $('#searchDisplay').html('<h4>Loading search results...</h4>');
   displayMovies(imdbIdArray, 'searchDisplay');
@@ -123,8 +121,8 @@ $('body').on('click', '.handleAddToWatchlist', handleAddToWatchlist);
 
 // If user is signed in, add movie to watchlist. If not, notify user.
 function handleAddToWatchlist() {
-  let imdbId = $(this).attr('data-imdbId') // get movie ID to search IMDB db (via unique URL)
-  let userId = sessionStorage.getItem('movieMasterId'); // check if user is signed in
+  const imdbId = $(this).attr('data-imdbId') // get movie ID to search IMDB db (via unique URL)
+  const userId = sessionStorage.getItem('movieMasterId'); // check if user is signed in
   if (userId !== null) {
     addMovieToDb(imdbId, userId);
     $(this).replaceWith(`<p style='color:green'>Added to Watchlist</p>`);
@@ -135,9 +133,9 @@ function handleAddToWatchlist() {
 
 // Pull movie from OMDB, create movie object, submit to DB
 async function addMovieToDb(imdbId, userId) {
-  let omdbMovie = await pullMovieFromOmdb(imdbId, 'id');
-  let runtimeUpdated = omdbMovie.Runtime.replace(/\D+/g, ''); // removes all non digits - in this case " min"
-  let movie = {
+  const omdbMovie = await pullMovieFromOmdb(imdbId, 'id');
+  const runtimeUpdated = omdbMovie.Runtime.replace(/\D+/g, ''); // removes all non digits - in this case " min"
+  const movie = {
     UserId: Number(userId),
     title: omdbMovie.Title,
     imdbUrl: `https://www.imdb.com/title/${omdbMovie.imdbID}/`,

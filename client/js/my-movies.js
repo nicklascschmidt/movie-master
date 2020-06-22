@@ -7,9 +7,9 @@ $(document).ready(handleMoviesOnLoad());
 
 // If user is logged in, displays watchlist movies on page. If not, displays message.
 async function handleMoviesOnLoad() {
-  let userId = sessionStorage.getItem('movieMasterId');
-  let unwatchedMovies = await pullMoviesFromDb('unwatched',userId);
-  let watchedMovies = await pullMoviesFromDb('watched',userId);
+  const userId = sessionStorage.getItem('movieMasterId');
+  const unwatchedMovies = await pullMoviesFromDb('unwatched',userId);
+  const watchedMovies = await pullMoviesFromDb('watched',userId);
   if (userId) {
     $(`#movie-container`).show();
     displayMovies(unwatchedMovies,'unwatched');
@@ -21,7 +21,7 @@ async function handleMoviesOnLoad() {
 
 // Pull movies for a certain type (watched/unwatched), return an array of movie objects.
 function pullMoviesFromDb(type,userId) {
-  let queryObj = {
+  const queryObj = {
     UserId: userId,
     isWatched: (type === 'watched') ? 1 : 0
   }
@@ -36,7 +36,7 @@ function displayMovies(array,type) {
   $(`#${type}-movies`).empty();
   if (array.length > 0) {
     for (let n=0; n < array.length; n++) {
-      let $movie = $(`
+      const $movie = $(`
         <div id='movie${array[n].id}' class='row p-2 mb-2 movie-custom'>
           <div class='col-12 col-sm-3 text-center'>
             <img src=${array[n].posterUrl} class='img-custom' alt='missing movie image'>
@@ -64,7 +64,7 @@ function displayMovies(array,type) {
       $(`#${type}-movies`).append($movie);
     }
   } else {
-    let message = (type === 'unwatched') ? 'No movies on your watchlist. Please add movies to your watchlist on the Movie Search page.' : 'No movies to show.';
+    const message = (type === 'unwatched') ? 'No movies on your watchlist. Please add movies to your watchlist on the Movie Search page.' : 'No movies to show.';
     $(`#${type}-movies`).html(`<h5 class='text-center'>${message}</h5>`);
   }
 }
@@ -75,7 +75,7 @@ function displayMovies(array,type) {
 $('body').on('click','.removeFromList',removeFromList);
 
 async function removeFromList() {
-  let movieId = $(this).attr('data-id');
+  const movieId = $(this).attr('data-id');
   $.ajax({
     url: `/api/movies/delete/${movieId}`,
     method: 'DELETE',
@@ -101,8 +101,8 @@ function watchedOrUnwatched(isWatched) {
 $('body').on('click','.markAsWatched',markAsWatched);
 
 function markAsWatched() {
-  let isWatched = $(this).attr('data-isWatched');
-  let movieId = $(this).attr('data-id');
+  const isWatched = $(this).attr('data-isWatched');
+  const movieId = $(this).attr('data-id');
   $.ajax({
     url: `/api/movies/update-watched/${movieId}`,
     method: 'PUT',
@@ -116,7 +116,7 @@ function markAsWatched() {
 
 // Reformat the user rating to a # with one decimal.
 function getUserRating(rating,id) {
-  let ratingFormatted = parseFloat(rating).toFixed(1);
+  const ratingFormatted = parseFloat(rating).toFixed(1);
   if (rating !== null) {
     return `<p>My <i class="far fa-star"></i> ${ratingFormatted}</p>`
   } else {
@@ -128,7 +128,7 @@ function getUserRating(rating,id) {
 $('body').on('click','.switchToUserRatingForm',switchToUserRatingForm);
 
 function switchToUserRatingForm() {
-  let id = $(this).attr('data-id');
+  const id = $(this).attr('data-id');
   $(this).replaceWith(`
     <div id='div${id}' class='input-group ml-auto' style='width:70px'>
       <input type='text' class='form-control form-control-sm p-1' placeholder='# /10' aria-label='testing' id='input${id}'>
@@ -146,14 +146,14 @@ $('body').on('click','.submitUserRating',submitUserRating);
 function submitUserRating() {
   event.preventDefault();
 
-  let id = $(this).attr('data-id'); // grab data-id (#) from the button
-  let inputRating = $(`#input${id}`).val() // grab user input
+  const id = $(this).attr('data-id'); // grab data-id (#) from the button
+  const inputRating = $(`#input${id}`).val() // grab user input
 
-  let errorObj = validateUserRating(inputRating);
+  const errorObj = validateUserRating(inputRating);
 
   if (!errorObj.isError) {
     submitUserRatingToDb(inputRating,id);
-    let userRatingHtml = getUserRating(inputRating,id); // get new html
+    const userRatingHtml = getUserRating(inputRating,id); // get new html
     $(`#div${id}`).html(userRatingHtml); // append new html to the container div
   } else {
     $(`.error${id}`).empty();
@@ -163,7 +163,7 @@ function submitUserRating() {
 
 // User rating validation (simple) - must be a # between 0 and 10.
 function validateUserRating(rating) {
-  let errorObj = {
+  const errorObj = {
     isError: null,
     error: null
   }
@@ -173,7 +173,7 @@ function validateUserRating(rating) {
     errorObj.isError = true;
     errorObj.error = 'Rating must be a # between 0 and 10.';
   }
-  return errorObj
+  return errorObj;
 }
 
 function submitUserRatingToDb(rating,id) {

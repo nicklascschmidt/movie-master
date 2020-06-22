@@ -7,7 +7,7 @@
 $(document).ready(handleOnLoad);
 
 function handleOnLoad() { 
-  let userId = sessionStorage.getItem('movieMasterId');
+  const userId = sessionStorage.getItem('movieMasterId');
   if (userId !== null) {
     $('#alreadyLoggedIn').show();
   } else {
@@ -17,7 +17,7 @@ function handleOnLoad() {
 
 // type = signup || login
 function captureUserInputs(type) {
-  let user = {
+  const user = {
     username: $(`#${type}UsernameInput`).val(),
     password: $(`#${type}PasswordInput`).val()
   }
@@ -32,8 +32,8 @@ $('#submitSignup').on('click',handleSignup);
 function handleSignup() {
   event.preventDefault();
 
-  let user = captureUserInputs('signup');
-  let errorResult = validateSignup(user);
+  const user = captureUserInputs('signup');
+  const errorResult = validateSignup(user);
   if (!errorResult.isError) {
     clearSignupForm();
     submitSignupToDb(user);
@@ -49,7 +49,7 @@ function handleSignup() {
 // Username: between 3-30 chars, no spaces
 // Password: between 5-30 chars, no spaces
 function validateSignup(user) {
-  let errorObj = {
+  const errorObj = {
     errors: [],
     isError: null
   };
@@ -101,8 +101,8 @@ $('#submitLogin').on('click',validateLogin);
 async function validateLogin() {
   event.preventDefault();
 
-  let user = captureUserInputs('login');
-  let userObj = await checkDbForLoginCredentials(user);
+  const user = captureUserInputs('login');
+  const userObj = await checkDbForLoginCredentials(user);
   if (userObj !== null) {
     welcomeUser(userObj);
   } else {
